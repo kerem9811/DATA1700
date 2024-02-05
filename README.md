@@ -4,7 +4,7 @@ OsloMet brukernavn: kerem9811
 
 GitHub brukernavn: kerem9811
 
-Github repo URL: https://github.com/data1700-v23/oblig-1-kerem9811
+Github repo URL: https://github.com/kerem9811/DATA1700Oblig1
 
 Fullt navn: Ken Solbakken Remen
 
