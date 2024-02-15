@@ -1,0 +1,29 @@
+body {
+    font-family : Arial, sans-serif;
+    line-height : 1.2;
+    }
+
+label, select, #allebilletter, #slettalt {
+    margin-right : 5px;
+    margin-left: 5px;
+    }
+
+.feilMelding {
+    color   : red;
+    display : none;
+    }
+#kjopBillett{
+    margin-left: 10px;
+    }
+#antall {
+    width : 40px;
+    }
+
+#border {
+    border : solid 2px blue;
+    width  : 450px;
+    }
+
+#filmfeilmelding, #antallfeilmelding, #navnfeilmelding, #etternavnfeilmelding, #tlffeilmelding, #epostfeilmelding {
+    color : red;
+    }

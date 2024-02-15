@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <title>data1700-oblig1-balin6546</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="bard.js"></script>
+</head>
+<body>
+<h1>Bestilling av kinobilletter</h1>
+
+<form id="bestillingsskjema">
+    <label for="film">Velg film: </label>
+    <select onchange="validerFilm()" id="film" name="film">
+        <option value=" ">Velg film her</option>
+        <option value="film1">Film 1</option>
+        <option value="film2">Film 2</option>
+        <option value="film3">Film 3</option>
+    </select>
+    <label for="film" class="errorMessage" id="filmUgyldigMelding">Du må velge en film</label>
+    <br><br>
+
+    <label for="antall">Antall: </label>
+    <input onchange="validerAntall()" type="number" id="antall" name="antall" min="1" max="99">
+    <label for="antall" class="errorMessage" id="antallUgyldigMelding">Du må velge et gyldig antall billetter</label>
+    <br><br>
+
+    <table>
+        <tr>
+            <td>
+                <label for="fornavn">Fornavn: </label>
+            </td>
+            <td>
+                <input onchange="validerFornavn()" type="text" id="fornavn" name="fornavn">
+            </td>
+            <td>
+                <label for="fornavn" class="errorMessage" id="fornavnUgyldigMelding">Feil</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="etternavn">Etternavn: </label>
+            </td>
+            <td>
+                <input onchange="validerEtternavn()" type="text" id="etternavn" name="etternavn">
+            </td>
+            <td>
+                <label for="etternavn" class="errorMessage" id="etternavnUgyldigMelding">Feil</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="telefonnr">Telefonnr: </label>
+            </td>
+            <td>
+                <input onchange="validerTelefonnr()" type="tel" id="telefonnr" name="telefonnr">
+            </td>
+            <td>
+                <label for="telefonnr" class="errorMessage" id="telefonnrUgyldigMelding">Feil</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="epost">Epost: </label>
+            </td>
+            <td>
+                <input onchange="validerEpost()" type="email" id="epost" name="epost">
+            </td>
+            <td>
+                <label for="epost" class="errorMessage" id="epostUgyldigMelding">Feil</label>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <button type="button" onClick="kjopBillett()" id="kjopKnapp">Kjøp billett</button>
+</form>
+
+<h2>Alle billetter</h2>
+
+<button>Slett alle billetter</button> <!--onclick="slettAlleBilletter()"-->
+
+</body>
+</html>

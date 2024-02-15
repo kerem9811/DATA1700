@@ -2,78 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Dette er første obligatoriske innlevering i DATA 1700.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DATA1700 - Oblig 1 - Bestilling av kinobilletter</title>
+    <meta content="Dette er første obligatoriske innlevering i DATA 1700." name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>DATA1700 - Oblig 1 - Bestilling av kinobilletter - kerem9811</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 
-<body style="font-family: Arial,sans-serif">
-<div style="border: solid 1px blue; width:450px; ">
-    <form>
-        <h1>Bestilling av kinobilletter</h1>
+<body id="border">
 
-        <div>Velg film:
-            <label for="film"></label>
-            <select id="film">
-                <option>Velg film her</option>
-                <option>2001: A Space Odyssey</option>
-                <option>Apocalypse Now Redux</option>
-                <option>The Godfather</option>
-                <option>Blade Runner</option>
-                <option>Eternal Sunshine of the Spotless Mind</option>
-                <option>Manos: The Hands of Fate</option>
-            </select>
-            <span id="filmfeilmelding" style="color:red;"></span>
-        </div>
+<h1>Bestilling av kinobilletter</h1>
 
-        <div><p></p></div>
+<form id="orderform" method="post" onsubmit="kjopBillett()"><!--onsubmit="kjopBillett();/* return false;*/"-->
+    <label for="film">Velg film:</label>
+    <select id="film" name="film" onchange="sjekkFilm()">
+        <option value=" ">Velg film her</option>
+        <option value="2001">2001: A Space Odyssey</option>
+        <option value="apocalypse">Apocalypse Now Redux</option>
+        <option value="godfather">The Godfather</option>
+        <option value="bladerunner">Blade Runner</option>
+        <option value="esotsm">Eternal Sunshine of the Spotless Mind</option>
+        <option value="manos">Manos: The Hands of Fate</option>
+    </select>
+    <label class="feilMelding" for="film" id="filmfeilmelding">Velg en film!</label>
 
-        <label for="antall">Antall:</label>
-        <input type="number" id="antall"/><span id="antallfeilmelding" style="color:red;"></span>
+    <!--Lager mellomrom-->
+    <br><br>
 
-        <div><p></p></div>
+    <label for="antall">Antall: </label>
+    <input id="antall" max="99" min="1" name="antall" onchange="sjekkAntall()" type="number"/>
+    <label class="feilMelding" for="antall" id="antallfeilmelding">Ikke gyldig antall! (1-99)</label>
 
-        <table>
-            <tr>
-                <td>Navn:</td>
-                <td><label for="fornavn"></label><input type="text" id="fornavn"/></td>
-                <td id="navnfeilmelding" style="color:red;"></td>
-            </tr>
-            <tr>
-                <td>Etternavn:</td>
-                <td><label for="etternavn"></label><input type="text" id="etternavn"/></td>
-                <td id="etternavnfeilmelding" style="color:red;"></td>
-            </tr>
-            <tr>
-                <td>Telefonnr:</td>
-                <td><label for="tlf"></label><input type="number" id="tlf"/></td>
-                <td id="tlffeilmelding" style="color:red;"></td>
-            </tr>
-            <tr>
-                <td>Epost:</td>
-                <td><label for="epost"></label><input type="email" id="epost"/></td>
-                <td id="epostfeilmelding" style="color:red;"></td>
-            </tr>
-            <tr>
-                <td>
-                    <button onclick="kjopBillett();return false">Kjøp billett</button>
-                </td>
-            </tr>
-        </table>
+    <br><br>
 
-        <div><p></p></div>
+    <table>
+        <tr>
+            <td>
+                <label for="fornavn">Fornavn: </label>
+            </td>
+            <td>
+                <input id="fornavn" name="fornavn" required type="text"/><!--onchange="sjekkFornavn()"-->
+            </td>
+            <td>
+                <label class="feilMelding" for="fornavn" id="navnfeilmelding">Kan ikke stå tom.</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="etternavn">Etternavn: </label>
+            </td>
+            <td>
+                <input id="etternavn" name="etternavn" required type="text"/> <!--onchange="sjekkEtternavn()"-->
+            </td>
+            <td>
+                <label class="feilMelding" for="etternavn" id="etternavnfeilmelding">Kan ikke stå tom.</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="tlf">Telefonnr: </label>
+            </td>
+            <td>
+                <input id="tlf" name="tlf" onchange="sjekkTlf()" type="tel"/>
+            </td>
+            <td>
+                <label class="feilMelding" for="tlf" id="tlffeilmelding">Åtte siffer!</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="epost">Epost: </label>
+            </td>
+            <td>
+                <input id="epost" name="epost" onchange="sjekkEpost()" type="email"/>
+            </td>
+            <td>
+                <label class="feilMelding" for="epost" id="epostfeilmelding">Skriv gyldig epost!</label>
+            </td>
+        </tr>
+    </table>
+    <input id="kjopBillett" type="submit" value="Kjøp billett">
+</form>
 
-        <h2></h2>
+<br>
 
-        <h3>Alle billetter</h3>
+<h2 id="allebilletter">Alle billetter: </h2>
 
-        <div id="liste"></div>
+<table>
+    <thead>
+    <tr>
+        <th>Film</th>
+        <th>Antall</th>
+        <th>Fornavn</th>
+        <th>Etternavn</th>
+        <th>Telefonnr</th>
+        <th>E-post</th>
+    </tr>
+    </thead>
+    <tbody id="liste">
+    </tbody>
+</table>
 
-        <button onclick="slettAlt()">Slett alle billettene</button>
-    </form>
-    <script
-            src="oblig1.js" type="application/javascript">
-    </script>
-</div>
+
+<button id="slettalt" onclick="slettAlt()">Slett alle billettene</button>
+
+<br><br>
+
+<script
+        src="script.js" type="application/javascript">
+</script>
 </body>
 </html>
