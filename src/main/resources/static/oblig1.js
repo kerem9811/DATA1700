@@ -10,53 +10,53 @@ function kjopBillett() {
     let telefonnr = document.getElementById("tlf").value;
     let epost = document.getElementById("epost").value;
 
-    let inputerror = false;
+    let inputError = false;
 
     // If-setninger for å sjekke om det er skrevet noe i tekstfeltet, hvis ikke så vises feil-melding
     if (film === "Velg film her") {
         document.getElementById("filmfeilmelding").innerText = "Du må velge en film."
-        inputerror = true;
+        inputError = true;
     } else {
         document.getElementById("filmfeilmelding").value = "";
     }
 
     if (antall <= 0 || antall > 10) {
         document.getElementById("antallfeilmelding").innerText = "Antall må være mellom 1 og 10"
-        inputerror = true;
+        inputError = true;
     } else {
         document.getElementById("antallfeilmelding").value = "";
     }
 
     if (fornavn === "") {
         document.getElementById("navnfeilmelding").innerText = "Feltet kan ikke være tomt."
-        inputerror = true;
+        inputError = true;
     } else {
         document.getElementById("navnfeilmelding").value = "";
     }
 
     if (etternavn === "") {
         document.getElementById("etternavnfeilmelding").innerText = "Feltet kan ikke være tomt."
-        inputerror = true;
+        inputError = true;
     } else {
         document.getElementById("etternavnfeilmelding").value = "";
     }
 
     if (telefonnr <= 19999999 || telefonnr > 99999999) {
         document.getElementById("tlffeilmelding").innerText = "Ikke gyldig telefonnr."
-        inputerror = true;
+        inputError = true;
     } else {
         document.getElementById("tlffeilmelding").value = "";
     }
 
     if (epost === "") {
         document.getElementById("epostfeilmelding").innerText = "Feltet kan ikke være tomt."
-        inputerror = true;
+        inputError = true;
     } else {
         document.getElementById("epostfeilmelding").value = "";
     }
 
 // Hvis det ikke er noen feil i bruker-input, lages en bestilling og felter blankes.
-    if (inputerror === false) {
+    if (inputError === false) {
         const person = {
             film: film,
             antall: antall,
