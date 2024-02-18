@@ -1,0 +1,23 @@
+body {
+    font-family : "Times New Roman", sans-serif;
+    border      : solid 2px blue;
+    }
+
+#border {
+    width : 450px;
+    }
+
+label, select, #allebilletter, #slettalt, #kjopBillett {
+    margin-right : 5px;
+    margin-left  : 5px;
+    }
+
+.feilmelding {
+    color       : red;
+    display     : none;
+    font-weight : bold;
+    }
+
+#antall {
+    width : 40px;
+    }
