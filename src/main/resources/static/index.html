@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta content="Dette er første obligatoriske innlevering i DATA 1700." name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <title>DATA1700 - Oblig 1 - Bestilling av kinobilletter</title>
+</head>
+
+<body id="border">
+
+<h1>Bestilling av kinobilletter</h1>
+<form id="orderform">
+    <label for="film">Velg film: </label>
+    <select id="film" onchange="sjekkFilm()">
+        <option value=" ">Velg film her</option>
+        <option value="1">2001: A Space Odyssey</option>
+        <option value="2">Apocalypse Now Redux</option>
+        <option value="3">The Godfather</option>
+        <option value="4">Blade Runner</option>
+        <option value="5">Eternal Sunshine of the Spotless Mind</option>
+        <option value="6">Manos: The Hands of Fate</option>
+    </select>
+    <label class="feilmelding" for="film" id="filmfeilmelding">Velg en film!</label>
+
+    <br><br>
+
+    <label for="antall">Antall:</label>
+    <input id="antall" max="99" min="1" onchange="sjekkAntall()" type="number"/>
+    <label class="feilmelding" for="antall" id="antallfeilmelding">Ikke gyldig antall! (1-99)</label>
+
+    <br><br>
+
+    <table>
+        <tr>
+            <td>
+                <label for="fornavn">Fornavn: </label>
+            </td>
+            <td>
+                <input id="fornavn" name="fornavn" onchange="sjekkFornavn()" required type="text"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="fornavn" id="fornavnfeilmelding">Kan ikke stå tom.</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="etternavn">Etternavn: </label>
+            </td>
+            <td>
+                <input id="etternavn" name="etternavn" onchange="sjekkEtternavn()" required type="text"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="etternavn" id="etternavnfeilmelding">Kan ikke stå tom.</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="tlf">Telefonnr: </label>
+            </td>
+            <td>
+                <input id="tlf" name="tlf" onchange="sjekkTelefonnr()" type="tel"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="tlf" id="tlffeilmelding">Åtte siffer!</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="epost">Epost: </label>
+            </td>
+            <td>
+                <input id="epost" name="epost" onchange="sjekkEpost()" type="email"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="epost" id="epostfeilmelding">Skriv en gyldig epost!</label>
+            </td>
+        </tr>
+    </table>
+
+    <button id="kjopBillett" onclick="ticketPlease(); return false;" type="button">Kjøp billett</button>
+    <button id="fyllUtRandom" onclick="fillDummyInfo();" type="button">Fyll ut info ;)</button>
+
+    <br><br>
+
+</form>
+<h2 id="allebilletter">Alle billetter</h2>
+
+<table id="liste"></table>
+
+<button id="slettalt" onclick="slettAlt()">Slett alle billettene</button>
+
+<script src="script.js" type="application/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</body>
+</html>
