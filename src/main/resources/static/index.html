@@ -13,7 +13,7 @@
 <h1>Bestilling av kinobilletter</h1>
 <form id="orderform">
     <label for="film">Velg film: </label>
-    <select id="film" onchange="sjekkFilm()">
+    <select id="film" class="skjema" onchange="sjekkFilm()">
         <option value=" ">Velg film her</option>
         <option value="1">2001: A Space Odyssey</option>
         <option value="2">Apocalypse Now Redux</option>
@@ -27,7 +27,7 @@
     <br><br>
 
     <label for="antall">Antall:</label>
-    <input id="antall" max="99" min="1" onchange="sjekkAntall()" type="number"/>
+    <input id="antall" class="skjema" max="99" min="1" onchange="sjekkAntall()" type="number"/>
     <label class="feilmelding" for="antall" id="antallfeilmelding">Ikke gyldig antall! (1-99)</label>
 
     <br><br>
@@ -38,7 +38,7 @@
                 <label for="fornavn">Fornavn: </label>
             </td>
             <td>
-                <input id="fornavn" name="fornavn" onchange="sjekkFornavn()" required type="text"/>
+                <input id="fornavn" class="skjema" name="fornavn" onchange="sjekkFornavn()" required type="text"/>
             </td>
             <td>
                 <label class="feilmelding" for="fornavn" id="fornavnfeilmelding">Kan ikke stå tom.</label>
@@ -49,7 +49,7 @@
                 <label for="etternavn">Etternavn: </label>
             </td>
             <td>
-                <input id="etternavn" name="etternavn" onchange="sjekkEtternavn()" required type="text"/>
+                <input id="etternavn" class="skjema" name="etternavn" onchange="sjekkEtternavn()" required type="text"/>
             </td>
             <td>
                 <label class="feilmelding" for="etternavn" id="etternavnfeilmelding">Kan ikke stå tom.</label>
@@ -60,7 +60,7 @@
                 <label for="tlf">Telefonnr: </label>
             </td>
             <td>
-                <input id="tlf" name="tlf" onchange="sjekkTelefonnr()" type="tel"/>
+                <input id="tlf" class="skjema" name="tlf" onchange="sjekkTelefonnr()" type="tel"/>
             </td>
             <td>
                 <label class="feilmelding" for="tlf" id="tlffeilmelding">Åtte siffer!</label>
@@ -71,7 +71,7 @@
                 <label for="epost">Epost: </label>
             </td>
             <td>
-                <input id="epost" name="epost" onchange="sjekkEpost()" type="email"/>
+                <input id="epost" class="skjema" name="epost" onchange="sjekkEpost()" type="email"/>
             </td>
             <td>
                 <label class="feilmelding" for="epost" id="epostfeilmelding">Skriv en gyldig epost!</label>
@@ -79,8 +79,8 @@
         </tr>
     </table>
 
-    <button id="kjopBillett" onclick="ticketPlease(); return false;" type="button">Kjøp billett</button>
-    <button id="fyllUtRandom" onclick="fillDummyInfo();" type="button">Fyll ut info ;)</button>
+    <button id="kjopBillett" onclick="ticketPlease(); /*return false;*/" type="button">Kjøp billett</button>
+    <button id="autofyll" onclick="fyllUtInfo();" type="button">↑</button>
 
     <br><br>
 
