@@ -16,6 +16,7 @@ function showOnOff(id, showOn, errorMessage) {
         document.getElementById(id + "feilmelding").innerHTML = "";
     }
 }
+
 const errorMessage = {
     film: "Du må velge en film",
     antall: "Du må velge et antall",
@@ -61,6 +62,7 @@ function sjekkSkjema() {
         return true;
     }
 }
+
 function sjekkFilm() {
     return regexSjekk("film", regEx.film);
 }
@@ -86,15 +88,16 @@ function sjekkEpost() {
 }
 
 // Funksjon som lager en ny billett med input-data -------------------------------------------
+
 function nyBillett() {
     billett = {
         // film: document.getElementById("film").value,
-        film: $("#film"),
-        antall: $("#antall"),
-        fornavn: $("#fornavn"),
-        etternavn: $("#etternavn"),
-        telefonnumer: $("#tlf"),
-        epost: $("#epost"),
+        film: $("#film").val(),
+        antall: $("#antall").val(),
+        fornavn: $("#fornavn").val(),
+        etternavn: $("#etternavn").val(),
+        telefonnr: $("#tlf").val(),
+        epost: $("#epost").val(),
     }
 }
 
@@ -106,8 +109,9 @@ function pushBillett() {
 // Funksjon som viser info om billetter i billettarrayet
 function visKjop() {
     // Begynner med å lage table head
-    let ut = "<table id='liste'><tr>" +
-        "<th>Film</th><th>Antall</th><th>Navn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" + "</tr>";
+    let ut = "<tr>" +
+        "<th>Film</th><th>Antall</th><th>Navn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
+        "</tr>";
     // Så blir hver billett printet i en tabell gjennom en for-løkke
     for (let i of billetter) {
         ut += "<tr>";
@@ -115,7 +119,7 @@ function visKjop() {
         ut += "</tr>";
     }
     // document.getElementById("liste").innerHTML = ut;
-    $("#liste").innerHTML = ut;
+    $("#liste").html(ut);
 }
 
 // Resetter skjemaet
@@ -131,6 +135,8 @@ function ticketPlease() {
     pushBillett();
     console.log(billetter);
     visKjop();
+    const liste = $("#liste");
+    console.log(liste);
     tomSkjema();
 
     // MÅ TA DE ØVERSTE FUNKSJOENEN INNI IF SETNINGA!
@@ -144,9 +150,27 @@ function ticketPlease() {
 // Funksjon som sletter alle billetter (tømmer arrayet)
 function slettAlt() {
     billetter.length = 0;
-    document.getElementById("liste").innerHTML = "";
+    // document.getElementById("liste").innerHTML = "";
+    $("#liste").html("");
 }
+
 // Fyll ut info knapp, for å slippe å skrive inn hver eneste gang :)
+/*$("#autofyll").click(function(){
+    fyllUtInfo();
+    console.log("#autofyll");
+    alert("The button was clicked.");
+});*/
+/*$(document).ready(function () {
+    $("#autofyll").click(function () {
+        fyllUtInfo();
+        console.log("#autofyll")
+    });
+});*/
+/*$(document).on('click', '#autofyll', function(){
+    alert("button is clicked");
+    fyllUtInfo();
+});*/
+
 function fyllUtInfo() {
     // document.getElementById("film").value = 1;
     $("#film").val(1);
@@ -157,7 +181,7 @@ function fyllUtInfo() {
     // document.getElementById("etternavn").value = "The Barbarian";
     $("#etternavn").val("The Barbarian");
     // document.getElementById("tlf").value = 99702345;
-    $("#tlf").val(90123456);
+    $("#tlf").val(22222222);
     // document.getElementById("epost").value = "epost@epost.no";
     $("#epost").val("epost@epost.no")
 }
