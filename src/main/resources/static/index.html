@@ -22,13 +22,13 @@
         <option value="5">Eternal Sunshine of the Spotless Mind</option>
         <option value="6">Manos: The Hands of Fate</option>
     </select>
-    <label class="feilmelding" for="film" id="filmfeilmelding">Velg en film!</label>
+    <label class="feilmelding" for="film" id="filmfeilmelding"></label>
 
     <br><br>
 
     <label for="antall">Antall:</label>
-    <input class="skjema" id="antall" max="99" min="1" onchange="sjekkAntall()" type="number"/>
-    <label class="feilmelding" for="antall" id="antallfeilmelding">Ikke gyldig antall! (1-99)</label>
+    <input class="skjema" id="antall" max="99" min="1" onchange="sjekkAntall()" required type="number"/>
+    <label class="feilmelding" for="antall" id="antallfeilmelding"></label>
 
     <br><br>
 
@@ -41,7 +41,7 @@
                 <input class="skjema" id="fornavn" name="fornavn" onchange="sjekkFornavn()" required type="text"/>
             </td>
             <td>
-                <label class="feilmelding" for="fornavn" id="fornavnfeilmelding">Kan ikke stå tom.</label>
+                <label class="feilmelding" for="fornavn" id="fornavnfeilmelding"></label>
             </td>
         </tr>
         <tr>
@@ -52,7 +52,7 @@
                 <input class="skjema" id="etternavn" name="etternavn" onchange="sjekkEtternavn()" required type="text"/>
             </td>
             <td>
-                <label class="feilmelding" for="etternavn" id="etternavnfeilmelding">Kan ikke stå tom.</label>
+                <label class="feilmelding" for="etternavn" id="etternavnfeilmelding"></label>
             </td>
         </tr>
         <tr>
@@ -60,10 +60,10 @@
                 <label for="tlf">Telefonnr: </label>
             </td>
             <td>
-                <input class="skjema" id="tlf" name="tlf" onchange="sjekkTelefonnr()" type="tel"/>
+                <input class="skjema" id="tlf" name="tlf" onchange="sjekkTelefonnr()" required type="tel"/>
             </td>
             <td>
-                <label class="feilmelding" for="tlf" id="tlffeilmelding">Åtte siffer!</label>
+                <label class="feilmelding" for="tlf" id="tlffeilmelding"></label>
             </td>
         </tr>
         <tr>
@@ -71,10 +71,10 @@
                 <label for="epost">Epost: </label>
             </td>
             <td>
-                <input class="skjema" id="epost" name="epost" onchange="sjekkEpost()" type="email"/>
+                <input class="skjema" id="epost" name="epost" onchange="sjekkEpost()" required type="email"/>
             </td>
             <td>
-                <label class="feilmelding" for="epost" id="epostfeilmelding">Skriv en gyldig epost!</label>
+                <label class="feilmelding" for="epost" id="epostfeilmelding"></label>
             </td>
         </tr>
     </table>
@@ -90,6 +90,7 @@
 <table id="liste"></table>
 
 <button id="slettalt" onclick="slettAlt()">Slett alle billettene</button>
+<br><br>
 
 <script src="script.js" type="application/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

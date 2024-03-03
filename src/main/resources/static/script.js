@@ -6,33 +6,15 @@ let billetter = [];
 // Lager så et tomt billett-objekt som mellomlagring
 let billett = {};
 
-// En funksjon som slår feilmelding av og på hvis regex sjekk feiler.
-
-// DENNE FUNKER IKKE, ER OGSAA AVSLAATT I REGEXSJEKK
-function showOnOff(id, showOn, errorMessage) {
-    if (showOn) {
-        document.getElementById(id + "feilmelding").innerHTML = errorMessage;
-    } else {
-        document.getElementById(id + "feilmelding").innerHTML = "";
-    }
-}
-
 const errorMessage = {
-    film: "Du må velge en film",
-    antall: "Du må velge et antall",
-    navn: "Du må skrive inn et navn, kan kun inneholde bokstaver",
-    telefonnr: "Du må skrive inn et telefonnummer, kan kun inneholde tall",
-    epost: "Du må skrive inn en gyldig epost-adresse"
+    film: "Du må velge en film.",
+    antall: "Du må velge antall mellom 1-99",
+    navn: "Du må skrive inn et navn.",
+    telefonnr: "Du må skrive inn et gyldig norsk telefonnummer.",
+    epost: "Du må skrive inn en gyldig epost-adresse."
 }
 
 // Forskjellig regex-formatering avhengig av input ----------------------------------------------------
-function regexSjekk(id, regEx) {
-    let input = document.getElementById(id).value;
-    let inputOK = regEx.test(input);
-    // showOnOff(id + "feilmelding", !inputOK);
-    return inputOK;
-}
-
 const regEx = {
     // Det må velges en film
     film: /[^ ]/,
@@ -43,10 +25,97 @@ const regEx = {
     // Aksepterer nummer med 8 siffer som begynner med 2-9, eller et internasjonalt nummer med minimum 6 siffer. (https://nkom.no/telefoni-og-telefonnummer/telefonnummer-og-den-norske-nummerplan/alle-nummerserier-for-norske-telefonnumre)
     telefonnr: /^(?:[2-9]\d{7}|(?:\+|00)\d{6,})$/,
     // Aksepterer "normale" epost-adresser (https://www.regular-expressions.info/email.html)
-    epost: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+    epost: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
 }
 
+/*function regexSjekk(id, regEx) {
+    // let innData = document.getElementById(id).value;
+    // return regexSjekk.test(innData);
+    return regexSjekk.test(document.getElementById(id).value);
+    // let innData = $("#id").val();
+    /!* let input = $("#id").val(); /!*document.getElementById(id).value;*!/
+     let inputOK = regEx.test(input);
+     return regEx.test(input);
+     // showErrorMessage(id + "feilmelding", !inputOK);
+     showErrorMessage(id + "feilmelding", !inputOK);
+     showErrorMessage(id +)*!/
+    // return inputOK;
+}*/
+
 // Funksjon som sjekker inndata -------------------------------------------------------------------
+function sjekkFilm() {
+    let inputOK = regEx.film.test($("#film").val());
+    if (!inputOK) {
+        $("#filmfeilmelding").html(errorMessage.film);
+    } else {
+        $("#filmfeilmelding").html("");
+    }
+    return inputOK;
+    // showErrorMessage("film", !inputOK, errorMessage.film);
+    /* regexSjekk("film", regEx.film);
+    regexSjekk.test(document.getElementById(id).value);*/
+}
+
+function sjekkAntall() {
+    let inputOK = regEx.antall.test($("#antall").val());
+    if (!inputOK) {
+        $("#antallfeilmelding").html(errorMessage.antall);
+    } else {
+        $("#antallfeilmelding").html("");
+    }
+    return inputOK;
+    // let inputOK = regexSjekk("antall", regEx.antall);
+    // showErrorMessage("antall", !inputOK, errorMessage.antall);
+}
+
+function sjekkFornavn() {
+    let inputOK = regEx.navn.test($("#fornavn").val());
+    if (!inputOK) {
+        $("#fornavnfeilmelding").html(errorMessage.navn);
+    } else {
+        $("#fornavnfeilmelding").html("");
+    }
+    return inputOK;
+    // let inputOK = regexSjekk("fornavn", regEx.navn);
+    // showErrorMessage("fornavn", !inputOK, errorMessage.navn);
+}
+
+function sjekkEtternavn() {
+    let inputOK = regEx.navn.test($("#etternavn").val());
+    if (!inputOK) {
+        $("#etternavnfeilmelding").html(errorMessage.navn);
+    } else {
+        $("#etternavnfeilmelding").html("");
+    }
+    return inputOK;
+    // showErrorMessage("etternavn", !inputOK, regEx.navn);
+    // let inputOK = regexSjekk("etternavn", regEx.navn);
+}
+
+function sjekkTelefonnr() {
+    let inputOK = regEx.telefonnr.test($("#tlf").val());
+    if (!inputOK) {
+        $("#tlffeilmelding").html(errorMessage.telefonnr);
+    } else {
+        $("#tlffeilmelding").html("");
+    }
+    return inputOK;
+    // showErrorMessage("tlf", !inputOK, regEx.telefonnr);
+    // let inputOK = regexSjekk("tlf", regEx.telefonnr);
+}
+
+function sjekkEpost() {
+    let inputOK = regEx.epost.test($("#epost").val());
+    if (!inputOK) {
+        $("#epostfeilmelding").html(errorMessage.epost);
+    } else {
+        $("#epostfeilmelding").html("");
+    }
+    return inputOK;
+    // let inputOK = regexSjekk("epost", regEx.epost);
+    // showErrorMessage("epost", !inputOK, regEx.epost);
+}
+
 function sjekkSkjema() {
     // Et array med funksjonene som skal sjekke RegEx
     let inputArray = [
@@ -55,7 +124,7 @@ function sjekkSkjema() {
         sjekkFornavn(),
         sjekkEtternavn(),
         sjekkTelefonnr(),
-        sjekkEpost()
+        sjekkEpost(),
     ]
     // Hvis alle verdier kommer tilbake som sanne blir sjekkSkjema-verdien også sann
     if (!inputArray.includes(false)) {
@@ -63,35 +132,9 @@ function sjekkSkjema() {
     }
 }
 
-function sjekkFilm() {
-    return regexSjekk("film", regEx.film);
-}
-
-function sjekkAntall() {
-    return regexSjekk("antall", regEx.antall);
-}
-
-function sjekkFornavn() {
-    return regexSjekk("fornavn", regEx.navn);
-}
-
-function sjekkEtternavn() {
-    return regexSjekk("etternavn", regEx.navn);
-}
-
-function sjekkTelefonnr() {
-    return regexSjekk("tlf", regEx.telefonnr);
-}
-
-function sjekkEpost() {
-    return regexSjekk("epost", regEx.epost);
-}
-
 // Funksjon som lager en ny billett med input-data -------------------------------------------
-
 function nyBillett() {
     billett = {
-        // film: document.getElementById("film").value,
         film: $("#film").val(),
         antall: $("#antall").val(),
         fornavn: $("#fornavn").val(),
@@ -131,46 +174,24 @@ function tomSkjema() {
 // viser billett-array i konsoll-logg for debug, så printer en tabell med billettene, før den tømmer skjemadata.
 // Hvis det kommer en feil i regex-sjekk vises det hvor det ble feil, og det kommer en liten alert-box :)
 function ticketPlease() {
-    nyBillett();
-    pushBillett();
-    console.log(billetter);
-    visKjop();
-    const liste = $("#liste");
-    console.log(liste);
-    tomSkjema();
-
-    // MÅ TA DE ØVERSTE FUNKSJOENEN INNI IF SETNINGA!
-
-    // if (sjekkSkjema() === true) {
-    // } else {
-    //     alert("Noe ble feil, sjekk skjema :(")
-    // }
+    if (sjekkSkjema()) {
+        nyBillett();
+        pushBillett();
+        console.log(billetter);
+        visKjop();
+        tomSkjema();
+    }/* else {
+        alert("Noe ble feil, sjekk skjema :(")
+    }*/
 }
 
 // Funksjon som sletter alle billetter (tømmer arrayet)
 function slettAlt() {
     billetter.length = 0;
-    // document.getElementById("liste").innerHTML = "";
     $("#liste").html("");
 }
 
 // Fyll ut info knapp, for å slippe å skrive inn hver eneste gang :)
-/*$("#autofyll").click(function(){
-    fyllUtInfo();
-    console.log("#autofyll");
-    alert("The button was clicked.");
-});*/
-/*$(document).ready(function () {
-    $("#autofyll").click(function () {
-        fyllUtInfo();
-        console.log("#autofyll")
-    });
-});*/
-/*$(document).on('click', '#autofyll', function(){
-    alert("button is clicked");
-    fyllUtInfo();
-});*/
-
 function fyllUtInfo() {
     // document.getElementById("film").value = 1;
     $("#film").val(1);

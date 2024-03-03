@@ -3,24 +3,27 @@ body {
     border      : solid 2px blue;
     }
 
-#border {
+#border, #liste {
     width : 450px;
     }
 
-label, select, #allebilletter, #slettalt, #kjopBillett {
+h1, label, select, #allebilletter, #slettalt, #kjopBillett {
     margin-right : 5px;
     margin-left  : 5px;
     }
 
 .feilmelding {
     color       : red;
-    display     : none;
     font-weight : bold;
     }
 
 #antall {
     width : 40px;
     }
-#fyllUtInfo{
-    width: 30px;
+
+#autofyll {
+    width            : 30px;
+    background-color : black;
+    color            : white;
+    border-radius    : 50%;
     }
