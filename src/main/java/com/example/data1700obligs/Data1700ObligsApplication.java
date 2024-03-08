@@ -9,5 +9,4 @@ public class Data1700ObligsApplication {
     public static void main(String[] args) {
         SpringApplication.run(Data1700ObligsApplication.class, args);
     }
-
 }
