@@ -4,10 +4,10 @@ body {
     }
 
 #border, #liste {
-    width : 450px;
+    width : max-content;
     }
 
-h1, label, select, #allebilletter, #slettalt, #kjopBillett {
+h1, label, select, #slettalt, #kjopBillett {
     margin-right : 5px;
     margin-left  : 5px;
     }
@@ -16,7 +16,11 @@ h1, label, select, #allebilletter, #slettalt, #kjopBillett {
     color       : red;
     font-weight : bold;
     }
-
+#allebilletter{
+    margin-right : 5px;
+    margin-left  : 5px;
+    text-decoration: underline;
+    }
 #antall {
     width : 40px;
     }
