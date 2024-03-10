@@ -1,6 +1,20 @@
 'use strict';
 // Fra W3schools: "Strict mode makes it easier to write "secure" JavaScript. Strict mode changes previously accepted "bad syntax" into real errors."
 
+$('document').ready(() => {
+
+    $('#orderform').submit(ev =>{
+        ev.preventDefault();
+        ticketPlease();
+    })
+
+    $('#autofyll').click(autoFillInfo);
+    $('#slettalt').click(deleteTickets);
+
+    /* REFRESH TICKET TABLE METHOD*/
+})
+
+
 // Begynner med å lage et array til billettene
 let tickets = [];
 // Lager så et tomt billett-objekt som mellomlagring
