@@ -24,32 +24,11 @@ public class Ticket {
     @NotBlank
     private String lastname;
 
-//    Aksepterer norske tlf-nummer som begynner med 2-7 eller 9, evt. utelandske tlf
-    @Pattern(regexp = "/^(?:[2-7,9]\\d{7}|(?:\\+|00)\\d{6,})$/")
+    //    Aksepterer norske tlf-nummer som begynner med 2-7 eller 9, evt. utenlandske tlf
+    @Pattern(regexp = "^(?:[2-7,9]\\d{7}|(?:\\+|00)\\d{6,})$")
     private String tel;
 
-//     Aksepterer "normale" epost-adresser (https://www.regular-expressions.info/email.html)
-    @Pattern(regexp = "/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$/i")
+    //     Aksepterer "normale" epost-adresser (https://www.regular-expressions.info/email.html)
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
     private String email;
-
-    /*@Override
-    public String toString() {
-        return "Ticket{" +
-                "Film='" + film + '\'' +
-                ", amount=" + amount +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", tel='" + tel + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }*/
-
-   /* public Ticket(String film, Integer amount, String firstname, String lastname, String tel, String email) {
-        this.film = film;
-        this.amount = amount;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.tel = tel;
-        this.email = email;
-    }*/
 }

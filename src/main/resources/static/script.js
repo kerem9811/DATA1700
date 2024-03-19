@@ -1,17 +1,37 @@
 'use strict';
 // Fra W3schools: "Strict mode makes it easier to write "secure" JavaScript. Strict mode changes previously accepted "bad syntax" into real errors."
 
+// from Gemini
+// Consider enhancing your script.js with more robust frontend validation
+// (e.g., using regular expressions) to provide immediate feedback to the user
+// and reduce unnecessary backend calls.
 $('document').ready(() => {
 
     $('#orderform').submit(event => {
         event.preventDefault();
-        addtoTickets();
+
+        const orderform = $('#orderform')[0];
+        const isOK = orderform.checkValidity();
+        if (isOK) {
+            addtoTickets();
+        } else {
+            alert("Oh no!")
+            displayErrorMessages(orderform);
+            function displayErrorMessages(form) {
+                const invalidFields = $(form).find(":invalid");
+                invalidFields.each(function() {
+                    const errorMessage = $(this).prop('validationMessage');
+                    $(this).siblings('.error-message').text(errorMessage);
+                });
+            }
+        }
+
 
     })
 
     $('#autofyll').click(autoFillInfo);
-    $('#slettalt').click(deleteTicketsNew());
-    refreshTicketTable();
+    $('#slettalt').click(deleteTicketsNew);
+    refreshTicketlist();
 })
 
 async function addtoTickets() {
@@ -31,15 +51,15 @@ async function addtoTickets() {
     await $.post("/tickets/add", ticket);
 
     // Legg billett til array og lag tabell
-    await refreshTicketTable();
+    await refreshTicketlist();
 }
 
 async function deleteTicketsNew() {
     await $.post("/tickets/clear");
-    await refreshTicketTable();
+    await refreshTicketlist();
 }
 
-async function refreshTicketTable() {
+async function refreshTicketlist() {
     // Få billetter fra backend
     let tickets = await $.get("/tickets/list");
 
@@ -47,9 +67,11 @@ async function refreshTicketTable() {
     const table = $('#liste');
     table.empty();
 
+
     // Sende billetter til tabell
-    let ut = "<tr>" +
-        "<th>Film</th><th>Antall</th><th>Navn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
+    let ut = null;
+    ut += "<tr>" +
+        "<th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
         "</tr>";
     // Så blir hver billett printet i en tabell gjennom en for-løkke
     for (let i of tickets) {
@@ -72,6 +94,14 @@ async function autoFillInfo() {
     $("#antall").val(Math.floor(Math.random() * (99) + 1));
     $("#fornavn").val(randomFornavn);
     $("#etternavn").val(randomEtternavn);
-    $("#tlf").val(Math.floor(Math.random() * (99999999 - 90000000 + 1)) + 90000000);
+    let oneortwo = Math.floor(Math.random() * (2) + 1);
+    switch (oneortwo) {
+        case 1:
+            $("#tlf").val(Math.floor(Math.random() * (99999999 - 90000000 + 1)) + 90000000);
+            break;
+        case 2:
+            $("#tlf").val(Math.floor(Math.random() * (49999999 - 40000000 + 1)) + 40000000);
+            break;
+    }
     $("#epost").val(randomEpost);
 }

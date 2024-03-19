@@ -7,6 +7,12 @@ body {
     width : max-content;
     }
 
+th {
+    text-align   : left;
+    margin-right : 5px;
+    margin-left  : 5px;
+    }
+
 h1, label, select, #slettalt, #kjopBillett {
     margin-right : 5px;
     margin-left  : 5px;
@@ -16,11 +22,13 @@ h1, label, select, #slettalt, #kjopBillett {
     color       : red;
     font-weight : bold;
     }
-#allebilletter{
-    margin-right : 5px;
-    margin-left  : 5px;
-    text-decoration: underline;
+
+#allebilletter {
+    margin-right    : 5px;
+    margin-left     : 5px;
+    text-decoration : underline;
     }
+
 #antall {
     width : 40px;
     }
@@ -30,4 +38,40 @@ h1, label, select, #slettalt, #kjopBillett {
     background-color : black;
     color            : white;
     border-radius    : 50%;
+    }
+
+
+.tftable {
+    font-size       : 14px;
+    color           : #333333;
+    width           : 100%;
+    border-width    : 1px;
+    border-color    : #87ceeb;
+    border-collapse : collapse;
+    }
+
+.tftable th {
+    font-size        : 18px;
+    background-color : #87ceeb;
+    border-width     : 1px;
+    padding          : 8px;
+    border-style     : solid;
+    border-color     : #ffffff;
+    text-align       : left;
+    }
+
+.tftable tr {
+    background-color : #ffffff;
+    }
+
+.tftable td {
+    font-size    : 14px;
+    border-width : 1px;
+    padding      : 8px;
+    border-style : solid;
+    border-color : #87ceeb;
+    }
+
+.tftable tr:hover {
+    background-color : #e0ffff;
     }
