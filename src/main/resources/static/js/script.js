@@ -15,24 +15,25 @@ $('document').ready(() => {
         if (isOK) {
             addtoTickets();
         } else {
-            alert("Oh no!")
+            alert("Oh no!");
+            console.log(displayErrorMessages(orderform))
             displayErrorMessages(orderform);
-            function displayErrorMessages(form) {
-                const invalidFields = $(form).find(":invalid");
-                invalidFields.each(function() {
-                    const errorMessage = $(this).prop('validationMessage');
-                    $(this).siblings('.error-message').text(errorMessage);
-                });
-            }
+
         }
-
-
     })
 
     $('#autofyll').click(autoFillInfo);
     $('#slettalt').click(deleteTicketsNew);
     refreshTicketlist();
 })
+
+async function displayErrorMessages(form) {
+    const invalidFields = $(form).find(":invalid");
+    invalidFields.each(function () {
+        const errorMessage = $(this).prop('validationMessage');
+        $(this).siblings('.error-message').text(errorMessage);
+    });
+}
 
 async function addtoTickets() {
     // Lage billett-objekt med tilhørende verdier
@@ -67,7 +68,6 @@ async function refreshTicketlist() {
     const table = $('#liste');
     table.empty();
 
-
     // Sende billetter til tabell
     let ut = null;
     ut += "<tr>" +
@@ -84,14 +84,15 @@ async function refreshTicketlist() {
 
 // Fyll ut info knapp, for å slippe å skrive inn hver eneste gang :) ----------------------------------------
 async function autoFillInfo() {
-    const fornavnArray = ["Per", "Kari", "Ola", "Conan", "Anne", "Berit"];
-    const etternavnArray = ["Pettersen", "Knutsen", "Olsen", "The Barbarian", "Andersen", "Berntsen"];
-    const epostArray = ["epost@epost.no", "email@gmail.com", "hotmail@hotmail.com", "chunkylover53@aol.com", "secret@email.com", "notreal@oslomet.no"];
+    const fornavnArray = ["Per", "Kari", "Ola", "Conan", "Anne", "Berit", "Ken", "Alexander", "Bård", "Thomas"];
+    const etternavnArray = ["Pettersen", "Knutsen", "Olsen", "The Barbarian", "Andersen", "Berntsen", "Linga", "Lønning", "Remen"];
+    const epostArray = ["epost@epost.no", "email@gmail.com", "hotmail@hotmail.com", "chunkylover53@aol.com", "secret@email.com", "notreal@oslomet.no", "gator@mac.com", "yruan@verizon.net", "mschilli@msn.com"];
     const randomFornavn = fornavnArray[Math.floor(Math.random() * fornavnArray.length)];
     const randomEtternavn = etternavnArray[Math.floor(Math.random() * etternavnArray.length)];
     const randomEpost = epostArray[Math.floor(Math.random() * epostArray.length)];
-    $("#film").val(Math.floor(Math.random() * (6) + 1));
-    $("#antall").val(Math.floor(Math.random() * (99) + 1));
+    $("#film").val(Math.floor(Math.random() * (9) + 1));
+    // Velger det minste tallet fra et array med 10 tilfeldig genererte tall, for realisme.
+    $("#antall").val(Math.ceil(Math.min(...Array.from({length:10}, Math.random)) * 100));
     $("#fornavn").val(randomFornavn);
     $("#etternavn").val(randomEtternavn);
     let oneortwo = Math.floor(Math.random() * (2) + 1);

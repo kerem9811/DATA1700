@@ -1,0 +1,78 @@
+html {
+    height : 100%;
+    }
+
+body {
+    height        : fit-content;
+    border        : solid 2px blue;
+    width         : fit-content;
+    padding-left  : 5px;
+    padding-right : 5px;
+    }
+
+#img {
+    background-size     : cover;
+    background-position : center center;
+    background-repeat   : no-repeat;
+    background-image    : url('../img/movieroll.avif');
+    width               : 100%;
+    height              : 100%;
+    }
+
+#width500 {
+    max-width : 500px;
+    }
+
+#liste {
+    width : fit-content;
+    }
+
+.feilmelding {
+    color       : red;
+    font-weight : bold;
+    }
+
+#h1, #allebilletter {
+    font-weight : bold;
+    text-shadow : 1px 1px 2px whitesmoke, 0 0 1em dimgray, 0 0 0.2em dimgray;
+    text-align  : center;
+    }
+
+#h1 span, #h2 span {
+    background-color : white;
+    }
+
+.tftable {
+    font-size       : 14px;
+    color           : #333333;
+    width           : 100%;
+    border-width    : 1px;
+    border-color    : lightgrey;
+    border-collapse : collapse;
+    }
+
+.tftable th {
+    font-size        : 16px;
+    background-color : lightgray;
+    border-width     : 1px;
+    padding          : 8px;
+    border-style     : solid;
+    border-color     : #ffffff;
+    text-align       : center;
+    }
+
+.tftable tr {
+    background-color : #ffffff;
+    }
+
+.tftable td {
+    /*font-size    : 14px;*/
+    border-width : 1px;
+    padding      : 8px;
+    border-style : solid;
+    border-color : lightgray;
+    }
+
+.tftable tr:hover {
+    background-color : gainsboro;
+    }

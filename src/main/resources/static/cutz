@@ -29,6 +29,61 @@ const errorMessage = {
     email: "Du må skrive inn en gyldig epost-adresse."
 }
 
+
+    <!--<table>
+        <tr>
+            <td> &lt;!&ndash; https://www.glyphicons.com/ &ndash;&gt;
+                <span class="input-group-addon,icon"><i class="glyphicon glyphicon-user"></i></span>
+            </td>
+            <td>
+                <input class="skjema" id="fornavn" name="fornavn" placeholder="Fornavn"
+                       required
+                       title="Skriv inn fornavn" type="text"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="fornavn" id="fornavnfeilmelding"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="input-group-addon,icon"><i class="glyphicon glyphicon-user"></i></span>
+            </td>
+            <td>
+                <input class="skjema" id="etternavn" name="etternavn" placeholder="Etternavn"
+                       required
+                       title="Skriv inn etternavn" type="text"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="etternavn" id="etternavnfeilmelding"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="input-group-addon,icon"><i class="glyphicon glyphicon-phone"></i></span>
+            </td>
+            <td>
+                <input class="skjema" id="tlf" name="tlf"
+                       pattern="[2-7,9]\d{7}|(?:\+|00)\d{6,}" placeholder="Telefonnummer"
+                       required title="Skriv et telefonnummer" type="tel"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="tlf" id="tlffeilmelding"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="input-group-addon,icon"><i class="glyphicon glyphicon-envelope"></i></span>
+            </td>
+            <td>
+                <input class="skjema,form-control" id="epost" name="epost" placeholder="E-post" required
+                       title="Skriv inn epost" type="email"/>
+            </td>
+            <td>
+                <label class="feilmelding" for="epost" id="epostfeilmelding"></label>
+            </td>
+        </tr>
+    </table>-->
+
 // Funksjon som sjekker film-input
 function checkFilm() {
     let inputOK = regEx.film.test($("#film").val());
@@ -191,5 +246,28 @@ function deleteTicketsOld() {
 }
 
 
+function randomByWeight(values, weights) {
+        // Calculate total weight
+        const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
 
+        // Generate random number between 1 and total weight
+        const randomNumber = Math.ceil(Math.random() * totalWeight);
+
+        // Find the selected value based on weights
+        let cumulativeWeight = 0;
+        for (let i = 0; i < values.length; i++) {
+            cumulativeWeight += weights[i];
+            if (cumulativeWeight >= randomNumber) {
+                return values[i];
+            }
+        }
+    }
+// Create values and weights
+    const values = Array.from({ length: 99 }, (_, i) => i + 1); // Numbers 1 to 99
+    const weights = values.map(value => Math.pow(100 - value, 4)); // Exponential weighting
+
+// Get a weighted random number
+    const selectedNumber = randomByWeight(values, weights);
+// console.log(selectedNumber);
+//     $("#antall").val(selectedNumber);
 
