@@ -13,20 +13,21 @@ $('document').ready(() => {
         const orderform = $('#orderform')[0];
         const isOK = orderform.checkValidity();
         if (isOK) {
-            addtoTickets();
+            void addtoTickets();
         } else {
             alert("Oh no!");
-            console.log(displayErrorMessages(orderform))
-            displayErrorMessages(orderform);
+            // console.log(displayErrorMessages(orderform))
+            // void displayErrorMessages(orderform);
 
         }
     })
 
     $('#autofyll').click(autoFillInfo);
     $('#slettalt').click(deleteTicketsNew);
-    refreshTicketlist();
+    void refreshTicketlist();
 })
 
+/*
 async function displayErrorMessages(form) {
     const invalidFields = $(form).find(":invalid");
     invalidFields.each(function () {
@@ -34,6 +35,7 @@ async function displayErrorMessages(form) {
         $(this).siblings('.error-message').text(errorMessage);
     });
 }
+*/
 
 async function addtoTickets() {
     // Lage billett-objekt med tilhørende verdier
@@ -51,7 +53,28 @@ async function addtoTickets() {
     // Send billett til backend
     await $.post("/tickets/add", ticket);
 
-    // Legg billett til array og lag tabell
+    // Lage array
+    let ticketArray = [await $.get("/tickets/list")];
+
+    // Logge array til konsoll
+    for (let i = 0; i < ticketArray.length; i++) {
+        console.log(ticketArray[i]);
+    }
+    let arrayToString = JSON.stringify(ticketArray);
+    console.log(arrayToString);
+
+    /*
+    * const myArray= [4,7,2,5,6];
+console.log(myArray);
+const myString=myArray.toString();
+console.log(myString);
+    * */
+
+    /*for (let i = 0; i < cars.length; i++) {
+text += cars[i] + "<br>";
+}*/
+
+    // Legg billett til tabell
     await refreshTicketlist();
 }
 
@@ -92,7 +115,7 @@ async function autoFillInfo() {
     const randomEpost = epostArray[Math.floor(Math.random() * epostArray.length)];
     $("#film").val(Math.floor(Math.random() * (9) + 1));
     // Velger det minste tallet fra et array med 10 tilfeldig genererte tall, for realisme.
-    $("#antall").val(Math.ceil(Math.min(...Array.from({length:10}, Math.random)) * 100));
+    $("#antall").val(Math.ceil(Math.min(...Array.from({length: 10}, Math.random)) * 100));
     $("#fornavn").val(randomFornavn);
     $("#etternavn").val(randomEtternavn);
     let oneortwo = Math.floor(Math.random() * (2) + 1);

@@ -76,8 +76,9 @@
 
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                <input class="form-control" id="epost" name="epost" placeholder="E-post" required
-                       title="Skriv inn epost" type="email" pattern="/^[\w-.%+]+@[\w-]+\.[A-Za-z]{2,}$/i"/>
+                <input class="form-control" id="epost" name="epost" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                       placeholder="E-post"
+                       required title="Skriv inn epost" type="email"/>
                 <label class="feilmelding" for="epost" id="epostfeilmelding"></label>
             </div>
 
@@ -112,6 +113,7 @@
     </div>
 
     <button class="btn btn-default" id="slettalt">&#10060;Slett alle billettene</button>
+    <button class="btn btn-default" id="billettarray">Billettarray</button>
 
     <br><br>
 
