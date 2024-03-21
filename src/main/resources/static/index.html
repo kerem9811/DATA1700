@@ -34,17 +34,25 @@
                     <option value="8">The Movie Part 2: Electric Boogaloo</option>
                     <option value="9">Steal This Film</option>
                 </select>
-                <label class="feilmelding" for="film" id="filmfeilmelding"></label>
+                <label class="feilmelding" for="film" id="filmfeilmelding">
+                    <div class="popup">
+                        <span class="popuptext" id="filmPopup">Du må velge en film</span>
+                    </div>
+                </label>
             </div>
 
             <br>
 
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                <input class="form-control" id="antall" max="99" min="1" placeholder="Antall"
-                       required
+                <input class="form-control" id="antall" max="99" min="1" onchange="checkAmount()"
+                       placeholder="Antall" required
                        title="Velg antall billetter (1-99)" type="number"/>
-                <div class="feilmelding,invalid-feedback,is-invalid" id="antallfeilmelding"></div>
+                <label class="feilmelding" for="antall" id="antallfeilmelding">
+                    <div class="popup">
+                        <span class="popuptext" id="antallPopup">Du må velge antall mellom 1-99</span>
+                    </div>
+                </label>
             </div>
 
             <br>
@@ -52,34 +60,52 @@
             <div class="input-group">
                 <!-- https://www.glyphicons.com/ -->
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input class="form-control" id="fornavn" name="fornavn" placeholder="Fornavn"
-                       required
-                       title="Skriv inn fornavn" type="text"/>
-                <label class="feilmelding" for="fornavn" id="fornavnfeilmelding"></label>
+                <input class="form-control" id="fornavn" name="fornavn" onchange="checkFirstname()"
+                       placeholder="Fornavn"
+                       required title="Skriv inn fornavn" type="text"/>
+                <label class="feilmelding" for="fornavn" id="fornavnfeilmelding">
+                    <div class="popup">
+                        <span class="popuptext" id="fornavnPopup">Du må skrive fornavn</span>
+                    </div>
+                </label>
+
             </div>
 
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input class="form-control" id="etternavn" name="etternavn" placeholder="Etternavn"
-                       required
+                <input class="form-control" id="etternavn" name="etternavn" onchange="checkLastname()"
+                       placeholder="Etternavn" required
                        title="Skriv inn etternavn" type="text"/>
-                <label class="feilmelding" for="etternavn" id="etternavnfeilmelding"></label>
+                <label class="feilmelding" for="etternavn" id="etternavnfeilmelding">
+                    <div class="popup">
+                        <span class="popuptext" id="etternavnPopup">Du må skrive etternavn</span>
+                    </div>
+                </label>
             </div>
 
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-                <input class="form-control" id="tlf" name="tlf"
+                <input class="form-control" id="tlf" name="tlf" onchange="checkTelephone()"
                        pattern="[2-7,9]\d{7}|(?:\+|00)\d{6,}" placeholder="Telefonnummer"
                        required title="Norsk eller internasjonalt telefonnummer" type="tel"/>
-                <label class="feilmelding" for="tlf" id="tlffeilmelding"></label>
+                <label class="feilmelding" for="tlf" id="tlffeilmelding">
+                    <div class="popup">
+                        <span class="popuptext" id="tlfPopup">Du må skrive et gyldig telefonnummer</span>
+                    </div>
+                </label>
             </div>
 
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                <input class="form-control" id="epost" name="epost" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-                       placeholder="E-post"
+                <input class="form-control" id="epost" name="epost"
+                       onchange="checkEmail()"
+                       pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$" placeholder="E-post"
                        required title="Skriv inn epost" type="email"/>
-                <label class="feilmelding" for="epost" id="epostfeilmelding"></label>
+                <label class="feilmelding" for="epost" id="epostfeilmelding">
+                    <div class="popup">
+                        <span class="popuptext" id="epostPopup">Du må skrive en gyldig epostadresse</span>
+                    </div>
+                </label>
             </div>
 
             <br>
@@ -91,19 +117,6 @@
 
         </form>
 
-        <!--if (!inputOK) {
-            $("#filmfeilmelding").html(errorMessage.film);
-        } else {
-            $("#filmfeilmelding").html("");-->
-        <!--// Forskjellige feilmeldinger basert på input
-        const errorMessage = {
-        film: "Du må velge en film.",
-        amount: "Du må velge antall mellom 1-99",
-        name: "Du må skrive inn et navn.",
-        tel: "Du må skrive inn et gyldig norsk telefonnummer.",
-        email: "Du må skrive inn en gyldig epost-adresse."
-        }-->
-
     </div>
 
     <h2 id="allebilletter"><span>Alle billetter</span></h2>
@@ -113,7 +126,6 @@
     </div>
 
     <button class="btn btn-default" id="slettalt">&#10060;Slett alle billettene</button>
-    <button class="btn btn-default" id="billettarray">Billettarray</button>
 
     <br><br>
 

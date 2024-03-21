@@ -1,32 +1,9 @@
-
-// Begynner med å lage et array til billettene
-let tickets = [];
-// Lager så et tomt billett-objekt som mellomlagring
-let oldTicket = {};
-
-// Forskjellig regex-formatering avhengig av input ----------------------------------------------------
-
-// Sjekking av regex
-const regEx = {
-    // Det må velges en film
-    film: /[^ ]/,
-    // Antall må være 1-99
-    amount: /^[1-9][0-9]?$/,
-    // Kan ikke stå tom, har også required tag i html. (https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)
-    name: /^(?!\s*$).+/i,
-    // Aksepterer nummer med 8 siffer som begynner med 2-7 eller 9, eller et internasjonalt nummer med minimum 6 siffer. (https://nkom.no/telefoni-og-telefonnummer/telefonnummer-og-den-norske-nummerplan/alle-nummerserier-for-norske-telefonnumre)
-    tel: /^(?:[2-7,9]\d{7}|(?:\+|00)\d{6,})$/,
-    // Aksepterer "normale" epost-adresser (https://www.regular-expressions.info/email.html)
-    email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-}
-
-// Forskjellige feilmeldinger basert på input
-const errorMessage = {
-    film: "Du må velge en film.",
-    amount: "Du må velge antall mellom 1-99",
-    name: "Du må skrive inn et navn.",
-    tel: "Du må skrive inn et gyldig norsk telefonnummer.",
-    email: "Du må skrive inn en gyldig epost-adresse."
+async function displayErrorMessages(form) {
+    const invalidFields = $(form).find(":invalid");
+    invalidFields.each(function () {
+        const errorMessage = $(this).prop('validationMessage');
+        $(this).siblings('.error-message').text(errorMessage);
+    });
 }
 
 
@@ -83,6 +60,37 @@ const errorMessage = {
             </td>
         </tr>
     </table>-->
+
+// Begynner med å lage et array til billettene
+let tickets = [];
+// Lager så et tomt billett-objekt som mellomlagring
+let oldTicket = {};
+
+// Forskjellig regex-formatering avhengig av input ----------------------------------------------------
+
+// Sjekking av regex
+const regEx = {
+    // Det må velges en film
+    film: /[^ ]/,
+    // Antall må være 1-99
+    amount: /^[1-9][0-9]?$/,
+    // Kan ikke stå tom, har også required tag i html. (https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)
+    name: /^(?!\s*$).+/i,
+    // Aksepterer nummer med 8 siffer som begynner med 2-7 eller 9, eller et internasjonalt nummer med minimum 6 siffer. (https://nkom.no/telefoni-og-telefonnummer/telefonnummer-og-den-norske-nummerplan/alle-nummerserier-for-norske-telefonnumre)
+    tel: /^(?:[2-7,9]\d{7}|(?:\+|00)\d{6,})$/,
+    // Aksepterer "normale" epost-adresser (https://www.regular-expressions.info/email.html)
+    email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+}
+
+// Forskjellige feilmeldinger basert på input
+const errorMessage = {
+    film: "Du må velge en film.",
+    amount: "Du må velge antall mellom 1-99",
+    name: "Du må skrive inn et navn.",
+    tel: "Du må skrive inn et gyldig norsk telefonnummer.",
+    email: "Du må skrive inn en gyldig epost-adresse."
+}
+
 
 // Funksjon som sjekker film-input
 function checkFilm() {
@@ -271,3 +279,24 @@ function randomByWeight(values, weights) {
 // console.log(selectedNumber);
 //     $("#antall").val(selectedNumber);
 
+
+    // Lage array
+    let ticketArray = [await $.get("/tickets/list")];
+
+    // Logge array til konsoll
+    for (let i = 0; i < ticketArray.length; i++) {
+        console.log(ticketArray[i]);
+    }
+    let arrayToString = JSON.stringify(ticketArray);
+    console.log(arrayToString);
+
+    /*
+    * const myArray= [4,7,2,5,6];
+console.log(myArray);
+const myString=myArray.toString();
+console.log(myString);
+    * */
+
+    /*for (let i = 0; i < cars.length; i++) {
+text += cars[i] + "<br>";
+}*/
