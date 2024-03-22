@@ -1,36 +1,60 @@
 package com.example.data1700obligs;
 
+import com.example.data1700obligs.repositories.TicketRepository;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
-
-//from Gemini
-//Your current setup doesn't seem to have explicit error-handling mechanisms.
-// Implement error handling in your frontend to display user-friendly messages
-// if a request to the backend fails. In your Spring controller, you might use
-// try-catch blocks and return appropriate HTTP status codes (e.g., 400 for bad requests) and error messages.
+import java.util.List;
 
 @Validated
 @RestController
 public class AppController {
+    @Autowired
+    private TicketRepository ticketRepository;
+
     private final ArrayList<Ticket> tickets = new ArrayList<>();
 
-    @PostMapping("/tickets/add")
-    public void addtoTicketsJava(@Valid Ticket oneTicket) {
-        tickets.add(oneTicket);
+   @PostMapping("/tickets/addfront")
+   public ResponseEntity<?> addtoTicketsJavaFront(@Valid @RequestBody Ticket oneTicket) {
+       try {
+           tickets.add(oneTicket);
+           return ResponseEntity.ok("Ticket saved in frontend");
+       } catch (Exception e) {
+           return ResponseEntity.badRequest().body("Error saving frontend ticket: " + e.getMessage());
+       }
+   }
+    @PostMapping("/tickets/addback")
+    public ResponseEntity<?> addtoTicketsJavaBack(@Valid Ticket oneTicket) {
+        try {
+            ticketRepository.save(oneTicket);
+            return ResponseEntity.ok("Ticket saved in db");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error saving ticket in db: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/tickets/list")
-    public ArrayList<Ticket> showTickets() {
+    @GetMapping("/tickets/listfront")
+    public ArrayList<Ticket> showTicketsFront() { // Frontend tickets
         return tickets;
     }
+    @GetMapping("/tickets/listback")
+    public List<Ticket> showTicketsBack() { // Changed return type to List
+        return ticketRepository.findAll(); // Use the repository to get all tickets
+    }
 
-    @PostMapping("/tickets/clear")
-    public void deleteTickets() {
+    @PostMapping("/tickets/clearfront")
+    public void deleteTicketsFront() {
         tickets.clear();
+    }
+
+    @PostMapping("/tickets/clearback")
+    public void deleteTicketsBack() {
+        ticketRepository.deleteAll();
     }
 }

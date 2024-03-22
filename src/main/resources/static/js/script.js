@@ -4,7 +4,8 @@
 $('document').ready(() => {
 
     $('#autofyll').click(autoFillInfo);
-    $('#slettalt').click(clearTickets);
+    $('#slettaltfront').click(clearTicketsFront);
+    $('#slettaltback').click(clearTicketsBack);
 
     $('#orderform').submit(event => {
         event.preventDefault();
@@ -12,13 +13,15 @@ $('document').ready(() => {
             if (data) {
                 console.log("Validering av skjema er " + data);
                 void addtoTickets();
+                void addtoTicketsBackend();
             } else {
                 alert("Du må sjekke input :(");
                 console.log("Validering av skjema er " + data);
             }
         })
     })
-    void updateTickets();
+    void updateTicketsBack();
+    void updateTicketsFront();
 })
 
 async function addtoTickets() {
@@ -34,23 +37,73 @@ async function addtoTickets() {
     // Tømme skjema
     $("#orderform").trigger('reset');
 
-    // Send billett til backend
-    await $.post("/tickets/add", ticket);
-    console.log("tickets add " + JSON.stringify(await $.get("/tickets/list")));
+
+    // Send billett to frontend with fetch for better error handling
+    const responseFront = await fetch("/tickets/addfront", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(ticket),
+    });
+
+    if (!responseFront.ok) {
+        console.error("Error saving ticket to frontend:", responseFront.statusText);
+        alert("Error saving ticket to frontend. Please check your input.");
+        return;  // Stop further execution if there's an error
+    }
 
     // Legg billett til tabell
-    await updateTickets();
+    await updateTicketsFront();
+}
+async function addtoTicketsBackend() {
+    // Lage billett-objekt med tilhørende verdier
+    let ticket = {};
+    ticket.film = $("#film  option:selected").text();
+    ticket.amount = $("#antall").val();
+    ticket.firstname = $("#fornavn").val();
+    ticket.lastname = $("#etternavn").val();
+    ticket.tel = $("#tlf").val();
+    ticket.email = $("#epost").val();
+
+    // Tømme skjema
+    $("#orderform").trigger('reset');
+
+    // Send billett to backend
+    try {
+         $.post("/tickets/addback", ticket);
+    } catch (e) {
+        console.error("Error saving ticket to backend:" + e);
+    }
+
+   /* const responseBack = await fetch("/tickets/addback", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(ticket),
+    });
+
+    if (!responseBack.ok) {
+        console.error("Error saving ticket to backend:", responseBack.statusText);
+        alert("Error saving ticket to backend. Please check your input.");
+        return;
+    }
+*/
+    // Legg billett til tabell
+    await updateTicketsBack();
 }
 
-async function clearTickets() {
-    await $.post("/tickets/clear");
-    await updateTickets();
+async function clearTicketsFront() {
+    await $.post("/tickets/clearfront");
+    await updateTicketsFront();
 }
 
-async function updateTickets() {
-    // Få billetter fra backend
-    let tickets = await $.get("/tickets/list");
-    console.log("Update tickets " + JSON.stringify(tickets));
+async function clearTicketsBack() {
+    await $.post("/tickets/clearback");
+    await updateTicketsBack();
+}
+
+async function updateTicketsFront() {
+    // Få billetter fra frontend
+    let tickets = await $.get("/tickets/listfront");
+    console.log("Update frontend tickets " + JSON.stringify(tickets));
 
     // Tømme tabell-body
     const table = $('#liste');
@@ -70,6 +123,32 @@ async function updateTickets() {
         nr++;
     }
     $("#liste").html(ut);
+    console.log(ut);
+}
+
+async function updateTicketsBack() {
+    // Få billetter fra backend
+    let tickets = await $.get("/tickets/listback");
+    console.log("Update backend tickets " + JSON.stringify(tickets));
+
+    // Tømme tabell-body
+    const table = $('#listeback');
+    table.empty();
+
+    // Sende billetter til tabell
+    let ut = null;
+    let nr = 1;
+    ut += "<tr>" +
+        "<th>Nr</th><th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
+        "</tr>";
+    // Så blir hver billett printet i en tabell gjennom en for-løkke
+    for (let i of tickets) {
+        ut += "<tr>";
+        ut += "<td>" + nr + "<td>" + i.film + "</td><td>" + i.amount + "</td><td>" + i.firstname + "</td><td>" + i.lastname + "</td><td>" + i.tel + "</td><td>" + i.email + "</td>";
+        ut += "</tr>";
+        nr++;
+    }
+    $("#listeback").html(ut);
     console.log(ut);
 }
 
