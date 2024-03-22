@@ -1,14 +1,10 @@
 'use strict';
 // Fra W3schools: "Strict mode makes it easier to write "secure" JavaScript. Strict mode changes previously accepted "bad syntax" into real errors."
 
-// from Gemini
-// Consider enhancing your script.js with more robust frontend validation
-// (e.g., using regular expressions) to provide immediate feedback to the user
-// and reduce unnecessary backend calls.
 $('document').ready(() => {
 
     $('#autofyll').click(autoFillInfo);
-    $('#slettalt').click(deleteTicketsNew);
+    $('#slettalt').click(clearTickets);
 
     $('#orderform').submit(event => {
         event.preventDefault();
@@ -22,7 +18,7 @@ $('document').ready(() => {
             }
         })
     })
-    void refreshTicketlist();
+    void updateTickets();
 })
 
 async function addtoTickets() {
@@ -40,19 +36,21 @@ async function addtoTickets() {
 
     // Send billett til backend
     await $.post("/tickets/add", ticket);
+    console.log("tickets add " + JSON.stringify(await $.get("/tickets/list")));
 
     // Legg billett til tabell
-    await refreshTicketlist();
+    await updateTickets();
 }
 
-async function deleteTicketsNew() {
+async function clearTickets() {
     await $.post("/tickets/clear");
-    await refreshTicketlist();
+    await updateTickets();
 }
 
-async function refreshTicketlist() {
+async function updateTickets() {
     // Få billetter fra backend
     let tickets = await $.get("/tickets/list");
+    console.log("Update tickets " + JSON.stringify(tickets));
 
     // Tømme tabell-body
     const table = $('#liste');
@@ -72,6 +70,7 @@ async function refreshTicketlist() {
         nr++;
     }
     $("#liste").html(ut);
+    console.log(ut);
 }
 
 // Sjekking av regex
@@ -92,11 +91,15 @@ async function checkFilm() {
     let filmOK = false;
     if ($("#film").val() !== "") {
         filmOK = true;
-        $("#filmPopup").css("visibility", "hidden");
-        $("#filmPopup").css("z-index", 1);
+        $("#filmPopup").css({
+            visibility: 'hidden',
+            'z-index': 1
+        });
     } else if ($("#film").val() === "") {
-        $("#filmPopup").css("visibility", "visible");
-        $("#filmPopup").css("z-index", 10000);
+        $("#filmPopup").css({
+            visibility: 'visible',
+            'z-index': 10000
+        });
     }
     return filmOK;
 }
@@ -106,11 +109,15 @@ async function checkAmount() {
     let antallValidity = document.getElementById('antall').checkValidity();
     let bothOK = false;
     if (!antallRegex || !antallValidity) {
-        $("#antallPopup").css("visibility", "visible");
-        $("#antallPopup").css("z-index", 10000);
+        $("#antallPopup").css({
+            visibility: 'visible',
+            'z-index': 10000
+        });
     } else {
-        $("#antallPopup").css("visibility", "hidden");
-        $("#antallPopup").css("z-index", 1);
+        $("#antallPopup").css({
+            visibility: 'hidden',
+            'z-index': 1
+        });
         bothOK = true;
     }
     return bothOK;
@@ -122,11 +129,15 @@ async function checkFirstname() {
     let firstnameValidity = document.getElementById('fornavn').checkValidity();
     let bothOK = false;
     if (!firstnameRegex || !firstnameValidity) {
-        $("#fornavnPopup").css("visibility", "visible");
-        $("#fornavnPopup").css("z-index", 10000);
+        $("#fornavnPopup").css({
+            visibility: 'visible',
+            'z-index': 10000
+        });
     } else if (firstnameRegex && firstnameValidity) {
-        $("#fornavnPopup").css("visibility", "hidden");
-        $("#fornavnPopup").css("z-index", 1);
+        $("#fornavnPopup").css({
+            visibility: 'hidden',
+            'z-index': 1
+        });
         bothOK = true;
     }
     return bothOK;
@@ -138,11 +149,15 @@ async function checkLastname() {
     let lastnameValidity = document.getElementById('etternavn').checkValidity();
     let bothOK = false;
     if (!lastnameRegex || !lastnameValidity) {
-        $("#etternavnPopup").css("visibility", "visible");
-        $("#etternavnPopup").css("z-index", 10000);
+        $("#etternavnPopup").css({
+            visibility: 'visible',
+            'z-index': 10000
+        });
     } else if (lastnameRegex && lastnameValidity) {
-        $("#etternavnPopup").css("visibility", "hidden");
-        $("#etternavnPopup").css("z-index", 1);
+        $("#etternavnPopup").css({
+            visibility: 'hidden',
+            'z-index': 1
+        });
         bothOK = true;
     }
     return bothOK;
@@ -154,11 +169,15 @@ async function checkTelephone() {
     let telValidity = document.getElementById('tlf').checkValidity();
     let bothOK = false;
     if (!telRegex || !telValidity) {
-        $("#tlfPopup").css("visibility", "visible");
-        $("#tlfPopup").css("z-index", 10000);
+        $("#tlfPopup").css({
+            visibility: 'visible',
+            'z-index': 10000
+        });
     } else if (telRegex && telValidity) {
-        $("#tlfPopup").css("visibility", "hidden");
-        $("#tlfPopup").css("z-index", 1);
+        $("#tlfPopup").css({
+            visibility: 'hidden',
+            'z-index': 1
+        });
         bothOK = true;
     }
     return bothOK;
@@ -170,12 +189,16 @@ async function checkEmail() {
     let emailValidity = document.getElementById('epost').checkValidity();
     let bothOK = false;
     if (emailRegex && emailValidity) {
-        $("#epostPopup").css("visibility", "hidden");
-        $("#epostPopup").css("z-index", 1);
+        $("#epostPopup").css({
+            visibility: 'hidden',
+            'z-index': 1
+        });
         bothOK = true;
     } else if (!emailRegex || !emailValidity) {
-        $("#epostPopup").css("visibility", "visible");
-        $("#epostPopup").css("z-index", 10000);
+        $("#epostPopup").css({
+            visibility: 'visible',
+            'z-index': 10000
+        });
     }
     return bothOK;
 }
