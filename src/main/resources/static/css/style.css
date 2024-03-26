@@ -23,7 +23,7 @@ body {
     max-width : 500px;
     }
 
-#liste {
+#liste, #listeback {
     width : fit-content;
     }
 
@@ -32,7 +32,7 @@ body {
     font-weight : bold;
     }
 
-#h1, #allebilletter {
+#h1, #allebilletter, #allebilletterback {
     font-weight : bold;
     text-shadow : 1px 1px 2px whitesmoke, 0 0 1em dimgray, 0 0 0.2em dimgray;
     text-align  : center;

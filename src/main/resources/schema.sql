@@ -1,5 +1,5 @@
-drop table if exists ticket;
-CREATE TABLE ticket
+drop table if exists tickets;
+CREATE TABLE tickets
 (
     id        IDENTITY NOT NULL PRIMARY KEY,
     film      VARCHAR(50)  NOT NULL,

@@ -1,8 +1,6 @@
 package com.example.data1700obligs;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -10,16 +8,13 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
-
 @AllArgsConstructor
 @Data
 @Entity
+@Table(name = "tickets")
 public class Ticket {
-    @Getter
-    @Setter
+    /* @Getter
+     @Setter*/
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

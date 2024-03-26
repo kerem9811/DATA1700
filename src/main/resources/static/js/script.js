@@ -3,10 +3,6 @@
 
 $('document').ready(() => {
 
-    $('#autofyll').click(autoFillInfo);
-    $('#slettaltfront').click(clearTicketsFront);
-    $('#slettaltback').click(clearTicketsBack);
-
     $('#orderform').submit(event => {
         event.preventDefault();
         checkForm().then(data => {
@@ -19,10 +15,52 @@ $('document').ready(() => {
                 console.log("Validering av skjema er " + data);
             }
         })
+        // Få sorterte billetter fra server
+        $.getJSON("/tickets/allSorted", function (tickets) {
+            console.log('Tickets received:', tickets);
+            buildTable(tickets);
+        }).fail(function () {
+            console.error("Failed to fetch ticket data.");
+            alert("Feil med innhenting av billetter fra server :(")
+        });
     })
-    void updateTicketsBack();
-    void updateTicketsFront();
-})
+    $('#autofyll').click(autoFillInfo);
+    $('#slettaltfront').click(clearTicketsFront);
+    $('#slettaltback').click(clearTicketsBack);
+});
+
+async function buildTable(tickets) {
+    const $table = $('<table>').addClass('tftable');
+    const $headerRow = $('<tr>');
+
+    // Add header columns
+    $headerRow.append('<th>Film</th>')
+        .append('<th>Amount</th>')
+        .append('<th>First Name</th>')
+        .append('<th>Last Name</th>')
+        .append('<th>Tel</th>')
+        .append('<th>Email</th>');
+
+    $table.append($headerRow);
+
+    // Add ticket data rows
+    for (const ticket of tickets) { // Use 'for...of' loop for array iteration
+        const $row = $('<tr>');
+        $row.append(`<td>${ticket.film}</td>`)
+            .append(`<td>${ticket.amount}</td>`)
+            .append(`<td>${ticket.firstname}</td>`)
+            .append(`<td>${ticket.lastname}</td>`)
+            .append(`<td>${ticket.tel}</td>`)
+            .append(`<td>${ticket.email}</td>`);
+
+        $table.append($row);
+    }
+
+    // Replace existing table content or add to a specific container
+    $('#listeback').html($table); // Assuming you have a suitable container element with this ID
+}
+
+// void updateTicketsFront();
 
 async function addtoTickets() {
     // Lage billett-objekt med tilhørende verdier
@@ -35,7 +73,7 @@ async function addtoTickets() {
     ticket.email = $("#epost").val();
 
     // Tømme skjema
-    $("#orderform").trigger('reset');
+    // $("#orderform").trigger('reset');
 
 
     // Send billett to frontend with fetch for better error handling
@@ -64,17 +102,21 @@ async function addtoTicketsBackend() {
     ticket.tel = $("#tlf").val();
     ticket.email = $("#epost").val();
 
+    console.log(ticket);
+
     // Tømme skjema
     $("#orderform").trigger('reset');
 
     // Send billett to backend
     try {
-         $.post("/tickets/addback", ticket);
+        $.post("/tickets/addback", ticket, function (data) {
+            console.log(data);
+        });
     } catch (e) {
         console.error("Error saving ticket to backend:" + e);
     }
 
-   /* const responseBack = await fetch("/tickets/addback", {
+    /*const responseBack = await fetch("/tickets/addback", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(ticket),
@@ -84,8 +126,7 @@ async function addtoTicketsBackend() {
         console.error("Error saving ticket to backend:", responseBack.statusText);
         alert("Error saving ticket to backend. Please check your input.");
         return;
-    }
-*/
+    }*/
     // Legg billett til tabell
     await updateTicketsBack();
 }
@@ -126,30 +167,44 @@ async function updateTicketsFront() {
     console.log(ut);
 }
 
+
 async function updateTicketsBack() {
     // Få billetter fra backend
-    let tickets = await $.get("/tickets/listback");
-    console.log("Update backend tickets " + JSON.stringify(tickets));
+    /* let ticketstring = await $.get("/tickets/listback");
+     // $("#listeback").html() = await $.get("/tickets/listback");
+     /!*let tickets = "";
+     $.get("/tickets/listback", function(data){
+         tickets = JSON.stringify(data);*!/
+     console.log("Get backend tickets " + ticketstring);
+     $("#listebackstring").html = JSON.stringify(ticketstring);
+     console.log($("#listebackstring").html);*/
 
-    // Tømme tabell-body
-    const table = $('#listeback');
-    table.empty();
+    /* // let tickets = {};
+     let tickets = $.get("/tickets/listback");
 
-    // Sende billetter til tabell
-    let ut = null;
-    let nr = 1;
-    ut += "<tr>" +
-        "<th>Nr</th><th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
-        "</tr>";
-    // Så blir hver billett printet i en tabell gjennom en for-løkke
-    for (let i of tickets) {
-        ut += "<tr>";
-        ut += "<td>" + nr + "<td>" + i.film + "</td><td>" + i.amount + "</td><td>" + i.firstname + "</td><td>" + i.lastname + "</td><td>" + i.tel + "</td><td>" + i.email + "</td>";
-        ut += "</tr>";
-        nr++;
-    }
-    $("#listeback").html(ut);
-    console.log(ut);
+
+     // Tømme tabell-body
+     const table = $('#listeback');
+     table.empty();
+
+     // Sende billetter til tabell
+     let ut = null;
+     // let nr = 1;
+     ut += "<tr>" +
+         "<th>Nr</th><th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
+         "</tr>";
+     // Så blir hver billett printet i en tabell gjennom en for-løkke
+     for (let i in tickets) {
+         ut += "<tr>";
+         ut += "<td>" + i.id + "<td>" + i.film + "</td><td>" + i.amount + "</td><td>" + i.firstname + "</td><td>" + i.lastname + "</td><td>" + i.tel + "</td><td>" + i.email + "</td>";
+         ut += "</tr>";
+         // nr++;
+     }
+     $("#listeback").html(ut);
+     table.html(ut);
+     console.log("String av array " + tickets.toString());
+     console.log("Verdien av table " + table);
+     console.log("Tabell: " + ut);*/
 }
 
 // Sjekking av regex
@@ -303,12 +358,12 @@ async function autoFillInfo() {
     const randomFornavn = fornavnArray[Math.floor(Math.random() * fornavnArray.length)];
     const randomEtternavn = etternavnArray[Math.floor(Math.random() * etternavnArray.length)];
     const randomEpost = epostArray[Math.floor(Math.random() * epostArray.length)];
-    $("#film").val(Math.floor(Math.random() * (9) + 1));
+    await $("#film").val(Math.floor(Math.random() * (9) + 1));
 
     // Velger det minste tallet fra et array med 10 tilfeldig genererte tall, for litt billettkjøp-realisme.
-    $("#antall").val(Math.ceil(Math.min(...Array.from({length: 10}, Math.random)) * 100));
-    $("#fornavn").val(randomFornavn);
-    $("#etternavn").val(randomEtternavn);
+    await $("#antall").val(Math.ceil(Math.min(...Array.from({length: 10}, Math.random)) * 100));
+    await $("#fornavn").val(randomFornavn);
+    await $("#etternavn").val(randomEtternavn);
     let oneortwo = Math.floor(Math.random() * (2) + 1);
     switch (oneortwo) {
         case 1:
@@ -318,5 +373,5 @@ async function autoFillInfo() {
             $("#tlf").val(Math.floor(Math.random() * (49999999 - 40000000 + 1)) + 40000000);
             break;
     }
-    $("#epost").val(randomEpost);
+    await $("#epost").val(randomEpost);
 }
