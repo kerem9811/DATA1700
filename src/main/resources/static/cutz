@@ -1,3 +1,281 @@
+<!--        <p id="listebackstring"></p>-->
+
+    <h2 id="allebilletter"><span>Alle billetter i frontend</span></h2>
+
+    <div class="littpadding">
+        <table class="tftable" id="liste"></table>
+    </div>
+
+
+
+<button class="btn btn-default" id="slettaltfront">&#10060;Slett alle billettene i frontend</button>
+
+async function getSortedBackend() {
+    // Få billetter fra server
+    let backendTickets;
+    try {
+        backendTickets = $.getJSON("tickets/listback");
+    } catch (e) {
+        console.log(e)
+    }
+    /* let ticketsList = $.getJSON("/tickets/allSorted", function (tickets) {
+         console.log('Backend tickets received:', tickets);
+     }).fail(function () {
+         console.error("Failed to fetch ticket data.");
+         alert("Feil med innhenting av billetter fra server :(")
+     });*/
+
+    // Sortere billettene
+    await clearTableBackend();
+}
+
+
+async function addtoTicketsBackend() {
+    /*    // Lage billett-objekt med tilhørende verdier
+        let ticket = {};
+        ticket.film = $("#film  option:selected").text();
+        ticket.amount = $("#antall").val();
+        ticket.firstname = $("#fornavn").val();
+        ticket.lastname = $("#etternavn").val();
+        ticket.tel = $("#tlf").val();
+        ticket.email = $("#epost").val();
+
+        console.log("Backend: " + ticket);
+
+        // Tømme skjema
+        $("#orderform").trigger('reset');*/
+
+    /*
+        // Send billett to backend
+        try {
+            $.post("/tickets/addback", ticket, function (data) {
+                console.log(data);
+            });
+        } catch (e) {
+            console.error("Error saving ticket to backend:" + e);
+        }
+    */
+
+    // Legg billett til tabell
+    await updateTicketsBack();
+}
+
+async function updateTicketsBack() {
+    // Få billetter fra backend
+    /* let ticketstring = await $.get("/tickets/listback");
+     // $("#listeback").html() = await $.get("/tickets/listback");
+     /!*let tickets = "";
+     $.get("/tickets/listback", function(data){
+         tickets = JSON.stringify(data);*!/
+     console.log("Get backend tickets " + ticketstring);
+     $("#listebackstring").html = JSON.stringify(ticketstring);
+     console.log($("#listebackstring").html);*/
+
+    /* // let tickets = {};
+     let tickets = $.get("/tickets/listback");
+
+
+     // Tømme tabell-body
+     const table = $('#listeback');
+     table.empty();
+
+     // Sende billetter til tabell
+     let ut = null;
+     // let nr = 1;
+     ut += "<tr>" +
+         "<th>Nr</th><th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
+         "</tr>";
+     // Så blir hver billett printet i en tabell gjennom en for-løkke
+     for (let i in tickets) {
+         ut += "<tr>";
+         ut += "<td>" + i.id + "<td>" + i.film + "</td><td>" + i.amount + "</td><td>" + i.firstname + "</td><td>" + i.lastname + "</td><td>" + i.tel + "</td><td>" + i.email + "</td>";
+         ut += "</tr>";
+         // nr++;
+     }
+     $("#listeback").html(ut);
+     table.html(ut);
+     console.log("String av array " + tickets.toString());
+     console.log("Verdien av table " + table);
+     console.log("Tabell: " + ut);*/
+}
+
+
+// FRONTEND ---------------------------------------------------------------------
+async function addtoTicketsAndTableFrontend() {
+    // Sende billetter til liste
+    await sendTicketsFrontend();
+    // Tømme skjema
+    // await clearInputForm();
+    // Tømme tabell-body
+    await emptyTableFrontend();
+    // Legg billett til tabell
+    await updateTicketsFrontend();
+}
+
+// Tømme tabell-body
+async function emptyTableFrontend() {
+    const table = $('#liste');
+    table.empty();
+}
+
+async function sendTicketsFrontend() {
+    // Lage billett-objekt med tilhørende verdier
+    let ticket = await createTicketObject();
+    /*
+    // Send billett til frontend with fetch
+     const responseFront = await fetch("/tickets/addfront", {
+         method: "POST",
+         headers: {"Content-Type": "application/json"},
+         body: JSON.stringify(ticket),
+     });
+     if (!responseFront.ok) {
+         console.error("Error saving ticket to frontend:", responseFront.statusText);
+         alert("Error saving ticket to frontend. Please check your input.");
+     }
+     */
+
+    try {
+        // Sende billett til liste
+        $.post("/tickets/addfront", ticket, function (data) {
+            console.log("Frontend data er " + data);
+            console.log("Frontend ticket er " + ticket);
+        });
+    } catch (e) {
+        console.error("Error saving ticket to frontend:" + e);
+    }
+
+}
+
+async function updateTicketsFrontend() {
+    // Få billetter fra frontend
+    let tickets = await $.get("/tickets/listfront");
+    console.log("Update frontend tickets " + JSON.stringify(tickets));
+
+    // Sende billetter til tabell, hver billett blir printet i en tabell gjennom en for-løkke
+    let ut = null;
+    let nr = 1;
+    ut += "<tr>";
+    ut += "<tr>" +
+        "<th>Nr</th><th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Telefonnr</th><th>Epost</th>" +
+        "</tr>";
+    for (let i of tickets) {
+        ut += "<td>" + nr + "<td>" + i.film + "</td><td>" + i.amount + "</td><td>" + i.firstname + "</td><td>" + i.lastname + "</td><td>" + i.tel + "</td><td>" + i.email + "</td>";
+        ut += "</tr>";
+        nr++;
+    }
+    $("#liste").html(ut);
+    console.log(ut);
+}
+
+async function clearTicketsFront() {
+    await $.post("/tickets/clearfront");
+    await updateTicketsFrontend();
+}
+
+
+
+// void addtoTicketsBackend();
+
+                // sendTicketBackend().then(buildTable);
+                // buildTable();
+
+
+// let ticket = createTicketObject();
+                // createTicketObject().then(clearInputForm);
+                // console.log("Ticket object: " + ticket);
+
+
+// await sendTicketBackend();
+
+                /*
+                getSortedBackend().then(sorted => {
+                    if (sorted) {
+                        console.log("Sorted list received: " + sorted);
+                    } else {
+                        console.log("Fail retrieving sorted list :( ")
+                    }
+                });
+                */
+
+
+    /*const responseBack = await fetch("/tickets/addback", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(ticket),
+    });
+
+    if (!responseBack.ok) {
+        console.error("Error saving ticket to backend:", responseBack.statusText);
+        alert("Error saving ticket to backend. Please check your input.");
+        return;
+    }*/
+
+
+  /*@PostMapping("tickets/addback")
+    public String addBackJava(Ticket oneTicket) {
+        try {
+            ticketRepository.saveTicket(oneTicket);
+            System.out.println(oneTicket);
+            return "Ticket saved in backend :)";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "Error saving ticket in backend :(" + e.getMessage();
+        }
+    }*/
+/*
+    @GetMapping("/tickets/listback")
+    public List<Ticket> showTicketsBack() {
+        try {
+            ticketRepository.getAllTickets();
+            System.out.println("Returned all tickets :)");
+        } catch (Exception e) {
+            System.out.println("Error returning tickets :(" + e.getMessage());
+            return null;
+        }
+        return ticketRepository.getAllTickets();
+    }
+
+    @PostMapping("/tickets/clearback")
+    public void deleteTickets() {
+        ticketRepository.deleteTickets();
+    }*/
+    /* public List<Ticket> getAllTickets() {
+        String sql = "SELECT * FROM tickets";
+        List<Ticket> allTickets = database.query(sql, new BeanPropertyRowMapper(Ticket.class));
+        return allTickets;
+    }*/
+
+
+    /*@PostMapping("/tickets/addback")
+    public String addtoTicketsJavaBack(Ticket oneTicket) {
+        try {
+            ticketRepository.save(oneTicket);
+            return "Ticket saved in db";
+        } catch (Exception e) {
+            return "Error saving ticket in db: " + e.getMessage();
+        }
+    }
+
+    @GetMapping("/tickets/listback")
+    public String showTicketsBack() {
+        String ticket;
+        ticket = ticketRepository.findAll().toString();
+        return ticket; // Use the repository to get all tickets
+    }
+    @GetMapping("/tickets/listback")
+    public List<Ticket> showTicketsBack() { // Changed return type to List
+        return ticketRepository.findAll(); // Use the repository to get all tickets
+    }
+     @PostMapping("tickets/listback")
+     public String ticketBackend(Ticket ticket){
+         ticketRepository.
+     }
+
+    @PostMapping("/tickets/clearback")
+    public void deleteTicketsBack() {
+        ticketRepository.deleteAll();
+    }*/
+
 DROP TABLE IF EXISTS films;
 CREATE TABLE films
 (

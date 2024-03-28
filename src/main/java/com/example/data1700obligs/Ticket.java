@@ -13,8 +13,6 @@ import lombok.Data;
 @Entity
 @Table(name = "tickets")
 public class Ticket {
-    /* @Getter
-     @Setter*/
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -41,7 +39,5 @@ public class Ticket {
     private String email;
 
     public Ticket() {
-
     }
-
 }

@@ -30,7 +30,7 @@ public class AppController {
             tickets.add(oneTicket);
             return ResponseEntity.ok("Ticket saved in frontend");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error saving frontend ticket: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error from AppController when saving frontend ticket: " + e.getMessage());
         }
     }
 
@@ -54,6 +54,7 @@ public class AppController {
             System.out.println("Error saving ticket in backend :(" + e.getMessage());
         }
     }
+/*
 
     @GetMapping("/tickets/listback")
     public List<Ticket> showTicketsBack() {
@@ -65,6 +66,7 @@ public class AppController {
             return null;
         }
     }
+*/
 
     @GetMapping("/tickets/allSorted")
     public ResponseEntity<?> getAllTicketsSorted() {
@@ -77,72 +79,26 @@ public class AppController {
         }
     }
 
-    @PostMapping("/tickets/clearback")
-    public void deleteTicketsBack() {
-        ticketRepository.deleteAll();
-    }
-    /*@PostMapping("tickets/addback")
-    public String addBackJava(Ticket oneTicket) {
-        try {
-            ticketRepository.saveTicket(oneTicket);
-            System.out.println(oneTicket);
-            return "Ticket saved in backend :)";
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "Error saving ticket in backend :(" + e.getMessage();
-        }
-    }*/
-/*
     @GetMapping("/tickets/listback")
     public List<Ticket> showTicketsBack() {
+        List<Ticket> unsortedTickets = null;
         try {
-            ticketRepository.getAllTickets();
+            unsortedTickets =  ticketRepository.findAll();
             System.out.println("Returned all tickets :)");
         } catch (Exception e) {
             System.out.println("Error returning tickets :(" + e.getMessage());
-            return null;
+            return unsortedTickets;
         }
-        return ticketRepository.getAllTickets();
+        return unsortedTickets;
     }
-
-    @PostMapping("/tickets/clearback")
-    public void deleteTickets() {
-        ticketRepository.deleteTickets();
-    }*/
-    /* public List<Ticket> getAllTickets() {
-        String sql = "SELECT * FROM tickets";
-        List<Ticket> allTickets = database.query(sql, new BeanPropertyRowMapper(Ticket.class));
-        return allTickets;
-    }*/
-
-
-    /*@PostMapping("/tickets/addback")
-    public String addtoTicketsJavaBack(Ticket oneTicket) {
-        try {
-            ticketRepository.save(oneTicket);
-            return "Ticket saved in db";
-        } catch (Exception e) {
-            return "Error saving ticket in db: " + e.getMessage();
-        }
-    }
-
-    @GetMapping("/tickets/listback")
-    public String showTicketsBack() {
-        String ticket;
-        ticket = ticketRepository.findAll().toString();
-        return ticket; // Use the repository to get all tickets
-    }
-    @GetMapping("/tickets/listback")
-    public List<Ticket> showTicketsBack() { // Changed return type to List
-        return ticketRepository.findAll(); // Use the repository to get all tickets
-    }
-     @PostMapping("tickets/listback")
-     public String ticketBackend(Ticket ticket){
-         ticketRepository.
-     }
 
     @PostMapping("/tickets/clearback")
     public void deleteTicketsBack() {
-        ticketRepository.deleteAll();
-    }*/
+        try {
+            ticketRepository.deleteAll();
+            System.out.println("Success deleting tickets :)");
+        } catch (Exception e) {
+            System.out.println("Error deleting tickets: " + e.getMessage());
+        }
+    }
 }
