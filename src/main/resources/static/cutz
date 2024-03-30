@@ -1,3 +1,110 @@
+
+        /*checkForm().then(async data => {
+            if (data) {
+                console.log("Validering av skjema er " + data);
+
+                try {
+                    await sendTicketBackend();
+                    if (!sendTicketBackend) {
+                        console.log("Failed sending ticket :(")
+                        return alert("Error sending ticket :(")
+                    } else if (sendTicketBackend) {
+                        try {
+                            await getSortedBackend();
+                        } catch (error) {
+                            console.error("Failed to fetch ticket data ", error);
+                            alert("Feil med innhenting av billetter fra server :(");
+                        }
+                    }
+                } catch (error) {
+                    console.error("Failed sending ticket :( ", error);
+                    alert("Failed sending ticket :( ");
+                }
+                void clearInputForm();
+
+            } else {
+                alert("Du må sjekke input :(");
+                console.log("Validering av skjema er " + data);
+            }
+        })*/
+
+
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.ArrayList;
+
+    // FRONTEND --------------------------------------------------------------------------------
+    private final ArrayList<Ticket> tickets = new ArrayList<>();
+
+
+
+    @PostMapping("/tickets/addfront")
+    public ResponseEntity<?> addtoTicketsJavaFront(@Valid @RequestBody Ticket oneTicket) {
+        try {
+            tickets.add(oneTicket);
+            return ResponseEntity.ok("Ticket saved in frontend");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error from AppController when saving frontend ticket: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/tickets/listfront")
+    public ArrayList<Ticket> showTicketsFront() { // Frontend tickets
+        return tickets;
+    }
+
+    @PostMapping("/tickets/clearfront")
+    public void deleteTicketsFront() {
+        tickets.clear();
+    }
+
+
+/*
+
+    @GetMapping("/tickets/listback")
+    public List<Ticket> showTicketsBack() {
+        try {
+            System.out.println("Returned all tickets :)");
+            return ticketRepository.findAll();
+        } catch (Exception e) {
+            System.out.println("Error returning tickets :(" + e.getMessage());
+            return null;
+        }
+    }
+*/
+
+/*
+
+    @GetMapping("/tickets/allSorted")
+    public ResponseEntity<?> getAllTicketsSorted() {
+        try {
+            List<Ticket> sortedTickets = ticketRepository.findAllByOrderByLastnameAsc();
+            return ResponseEntity.ok(sortedTickets); // Return a 200 OK response with the tickets
+        } catch (Exception e) {
+            System.out.println("Error returning tickets :(" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+*/
+
+
+    @GetMapping("/tickets/listback")
+    public List<Ticket> showTicketsBack() {
+        List<Ticket> unsortedTickets = null;
+        try {
+            unsortedTickets =  ticketRepository.findAll();
+            System.out.println("Returned all tickets :)");
+        } catch (Exception e) {
+            System.out.println("Error returning tickets :(" + e.getMessage());
+            return unsortedTickets;
+        }
+        return unsortedTickets;
+    }
+
+
 <!--        <p id="listebackstring"></p>-->
 
     <h2 id="allebilletter"><span>Alle billetter i frontend</span></h2>
