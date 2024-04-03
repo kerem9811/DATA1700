@@ -1,38 +1,59 @@
 'use strict';
-// Fra W3schools: "Strict mode makes it easier to write "secure" JavaScript. Strict mode changes previously accepted "bad syntax" into real errors."
+// Fra W3schools: "Strict mode makes it easier to write "secure" JavaScript.
+// Strict mode changes previously accepted "bad syntax" into real errors."
 
 $('document').ready(async () => {
-    alert("Document ready");
+    // An autofill button for faster debugging
     $('#autofyll').click(autoFillInfo);
 
     // Submit form button event
     $('#orderform').submit(async event => {
+        // Prevent default behaviour, instead do as below.
         event.preventDefault();
-        await $("#loading").show();
-        console.log("Showing loading gif");
-        await smallTimeout();
-        if (await checkForm()) { // Check form validity
-            console.log("Validering av skjema er true");
+        // Check form validity on submit
+        if (await checkForm()) {
+            console.log("Validation succeeded!");
+            // Wait for the ticket to be saved, then fetch updated tickets after saving
+            sendTicketBackend().then(getSortedBackend);
             try {
-                sendTicketBackend().then(getSortedBackend); // Wait for the ticket to be saved, then fetch updated tickets after saving
+                // Clears the form after the ticket has been sent and the table has been propagated.
                 await clearInputForm();
             } catch (error) {
                 console.error("Failed to save or fetch tickets", error);
                 alert("Error processing your request :(");
-            } finally {
-                $('#loading').hide();
-                console.log("Hiding gif");
             }
         } else {
             alert("Du må sjekke input :(");
-            console.log("Validering av skjema er false");
+            console.log("Validation failed.");
         }
-
     })
     $('#slettaltback').click(clearTicketsBackend);
 
-
 // BACKEND --------------------------------------------------------------------------------------
+
+//     Populate dropdown list with films from backend table.
+    async function populateDropdown() {
+        try {
+            await $.getJSON("/films", function (films) {
+                console.log("Received films for dropdown", films);
+
+                let options = $.parseJSON(films);
+                $.each(options, function (film){
+                    $('#film').append('<option value="' + film.id + '">' + film.name + '</option>');
+                });
+
+               /* let options = $.parseJSON(films);
+                $.each(options, function (film) {
+                    $('#film').append('<option value="' + film.id + '">' + film.name + '</option>');
+                });*/
+            })
+        } catch (e) {
+            console.log("Error receicing films to dropdown: " + e);
+            throw e;
+        }
+    }
+
+//     Create ticket object and send it to the backend
     async function sendTicketBackend() {
         try {
             let ticket = await createTicketObject();
@@ -91,12 +112,6 @@ $('document').ready(async () => {
     }
 
 // COMMON ----------------------------------------------------------------------
-    async function smallTimeout() {
-        console.log('starting timer');
-        await new Promise(resolve => setTimeout(resolve, 200));
-        console.log('after 200ms');
-
-    }
 
     async function createTicketObject() {
         // Lage billett-objekt med tilhørende verdier
@@ -113,6 +128,10 @@ $('document').ready(async () => {
     async function clearInputForm() {
         $("#orderform").trigger('reset');
     }
+
+    await populateDropdown();
+    alert("Document ready");
+
 }); /* End of document ready */
 
 // Sjekking av input ----------------------------------------------------------------------------------
@@ -231,17 +250,17 @@ async function checkEmail() {
     let emailRegex = regEx.email.test($("#epost").val());
     let emailValidity = document.getElementById('epost').checkValidity();
     let bothOK = false;
-    if (emailRegex && emailValidity) {
+    if (!emailRegex || !emailValidity) {
+        $("#epostPopup").css({
+            visibility: 'visible',
+            'z-index': 10000
+        });
+    } else if (emailRegex && emailValidity) {
         $("#epostPopup").css({
             visibility: 'hidden',
             'z-index': 1
         });
         bothOK = true;
-    } else if (!emailRegex || !emailValidity) {
-        $("#epostPopup").css({
-            visibility: 'visible',
-            'z-index': 10000
-        });
     }
     return bothOK;
 }

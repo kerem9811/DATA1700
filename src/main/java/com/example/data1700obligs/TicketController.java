@@ -1,5 +1,6 @@
 package com.example.data1700obligs;
 
+
 import com.example.data1700obligs.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Validated
 @RestController
-public class AppController {
+public class TicketController {
 
     //    BACKEND -------------------------------------------------------------------------------
     @Autowired
