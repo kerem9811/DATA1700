@@ -14,7 +14,7 @@
 </head>
 
 <body>
-<div id="img">
+<div id="img" class="container-fluid">
     <h1 id="h1"><span>Bestilling av kinobilletter</span></h1>
 
     <div id="width500">
@@ -23,7 +23,7 @@
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
 
-                <select class="form-control" id="film" name="films" required>
+                <select class="form-control" id="film" name="films" required onchange="checkFilm()">
                     <!--                   Is populated automatically from backend -->
                 </select>
 

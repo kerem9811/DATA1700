@@ -55,7 +55,7 @@ body {
     font-size        : 16px;
     background-color : lightgray;
     border-width     : 1px;
-    padding          : 8px;
+    padding          : 4px;
     border-style     : solid;
     border-color     : #ffffff;
     text-align       : center;
@@ -67,8 +67,9 @@ body {
 
 .tftable td {
     /*font-size    : 14px;*/
+    display: table-cell;
     border-width : 1px;
-    padding      : 8px;
+    padding      : 2px;
     border-style : solid;
     border-color : lightgray;
     }

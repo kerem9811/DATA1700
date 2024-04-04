@@ -138,14 +138,10 @@ $('document').ready(async () => {
 // Sjekking av regex
 const regEx = {
     // Det må velges en film
-    film: /[^ ]/,
-    // Antall må være 1-99
-    amount: /^[1-9][0-9]?$/,
-    // Kan ikke stå tom, har også required tag i html. (https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)
-    name: /^(?!\s*$).+/i,
-    // Aksepterer nummer med 8 siffer som begynner med 2-7 eller 9, eller et internasjonalt nummer med minimum 6 siffer. (https://nkom.no/telefoni-og-telefonnummer/telefonnummer-og-den-norske-nummerplan/alle-nummerserier-for-norske-telefonnumre)
-    tel: /^(?:[2-7,9]\d{7}|(?:\+|00)\d{6,})$/,
-    // Aksepterer "normale" epost-adresser (https://www.regular-expressions.info/email.html)
+    film: /[^ ]/, // Antall må være 1-99
+    amount: /^[1-9][0-9]?$/, // Kan ikke stå tom, har også required tag i html. (https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)
+    name: /^(?!\s*$).+/i, // Aksepterer nummer med 8 siffer som begynner med 2-7 eller 9, eller et internasjonalt nummer med minimum 6 siffer. (https://nkom.no/telefoni-og-telefonnummer/telefonnummer-og-den-norske-nummerplan/alle-nummerserier-for-norske-telefonnumre)
+    tel: /^(?:[2-7,9]\d{7}|(?:\+|00)\d{6,})$/, // Aksepterer "normale" epost-adresser (https://www.regular-expressions.info/email.html)
     email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
 }
 
@@ -154,13 +150,11 @@ async function checkFilm() {
     if ($("#film").val() !== "") {
         filmOK = true;
         $("#filmPopup").css({
-            visibility: 'hidden',
-            'z-index': 1
+            visibility: 'hidden', 'z-index': 1
         });
     } else if ($("#film").val() === "") {
         $("#filmPopup").css({
-            visibility: 'visible',
-            'z-index': 10000
+            visibility: 'visible', 'z-index': 10000
         });
     }
     return filmOK;
@@ -172,13 +166,11 @@ async function checkAmount() {
     let bothOK = false;
     if (!antallRegex || !antallValidity) {
         $("#antallPopup").css({
-            visibility: 'visible',
-            'z-index': 10000
+            visibility: 'visible', 'z-index': 10000
         });
     } else {
         $("#antallPopup").css({
-            visibility: 'hidden',
-            'z-index': 1
+            visibility: 'hidden', 'z-index': 1
         });
         bothOK = true;
     }
@@ -192,13 +184,11 @@ async function checkFirstname() {
     let bothOK = false;
     if (!firstnameRegex || !firstnameValidity) {
         $("#fornavnPopup").css({
-            visibility: 'visible',
-            'z-index': 10000
+            visibility: 'visible', 'z-index': 10000
         });
     } else if (firstnameRegex && firstnameValidity) {
         $("#fornavnPopup").css({
-            visibility: 'hidden',
-            'z-index': 1
+            visibility: 'hidden', 'z-index': 1
         });
         bothOK = true;
     }
@@ -212,13 +202,11 @@ async function checkLastname() {
     let bothOK = false;
     if (!lastnameRegex || !lastnameValidity) {
         $("#etternavnPopup").css({
-            visibility: 'visible',
-            'z-index': 10000
+            visibility: 'visible', 'z-index': 10000
         });
     } else if (lastnameRegex && lastnameValidity) {
         $("#etternavnPopup").css({
-            visibility: 'hidden',
-            'z-index': 1
+            visibility: 'hidden', 'z-index': 1
         });
         bothOK = true;
     }
@@ -232,13 +220,11 @@ async function checkTelephone() {
     let bothOK = false;
     if (!telRegex || !telValidity) {
         $("#tlfPopup").css({
-            visibility: 'visible',
-            'z-index': 10000
+            visibility: 'visible', 'z-index': 10000
         });
     } else if (telRegex && telValidity) {
         $("#tlfPopup").css({
-            visibility: 'hidden',
-            'z-index': 1
+            visibility: 'hidden', 'z-index': 1
         });
         bothOK = true;
     }
@@ -252,13 +238,11 @@ async function checkEmail() {
     let bothOK = false;
     if (!emailRegex || !emailValidity) {
         $("#epostPopup").css({
-            visibility: 'visible',
-            'z-index': 10000
+            visibility: 'visible', 'z-index': 10000
         });
     } else if (emailRegex && emailValidity) {
         $("#epostPopup").css({
-            visibility: 'hidden',
-            'z-index': 1
+            visibility: 'hidden', 'z-index': 1
         });
         bothOK = true;
     }
@@ -267,14 +251,7 @@ async function checkEmail() {
 
 async function checkForm() {
     // Et array av alle validitets-sjekker
-    let validationFunctionsArray = [
-        await checkFilm(),
-        await checkAmount(),
-        await checkFirstname(),
-        await checkLastname(),
-        await checkTelephone(),
-        await checkEmail(),
-    ]
+    let validationFunctionsArray = [await checkFilm(), await checkAmount(), await checkFirstname(), await checkLastname(), await checkTelephone(), await checkEmail(),]
     // Hvis alle verdier kommer tilbake som sanne blir total-verdien også sann
     return !validationFunctionsArray.includes(false);
 }
