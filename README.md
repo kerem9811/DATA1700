@@ -6,7 +6,7 @@ GitHub brukernavn: kerem9811
 
 Github repo URL: https://github.com/kerem9811/DATA1700/tree/oblig3
 
-YouTube unlisted video: ...
+YouTube unlisted video: https://www.youtube.com/watch?v=QH6sNsO6lXw
 
 Fullt navn: Ken Solbakken Remen
 
