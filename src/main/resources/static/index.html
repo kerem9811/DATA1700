@@ -18,22 +18,13 @@
     <h1 id="h1"><span>Bestilling av kinobilletter</span></h1>
 
     <div id="width500">
-        <form class="form-group" id="orderform" novalidate><!--novalidate-->
+        <form class="form-group" id="orderform"><!--novalidate-->
 
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
 
                 <select class="form-control" id="film" name="films" required>
-                    <option disabled selected value="">Velg film her</option>
-                    <!--<option value="1">2001: A Space Odyssey</option>
-                    <option value="2">Apocalypse Now Redux</option>
-                    <option value="3">The Godfather</option>
-                    <option value="4">Blade Runner</option>
-                    <option value="5">Eternal Sunshine of the Spotless Mind</option>
-                    <option value="6">Manos: The Hands of Fate</option>
-                    <option value="7">Minecraft: The Movie</option>
-                    <option value="8">The Movie Part 2: Electric Boogaloo</option>
-                    <option value="9">Steal This Film</option>-->
+<!--                   Is populated automatically from backend -->
                 </select>
 
                 <label class="feilmelding" for="film" id="filmfeilmelding">
@@ -114,29 +105,26 @@
 
             <input class="btn btn-default" type="submit" value="&#128722;Kjøp billetter">
             <input class="btn btn-default" id="autofyll" type="button" value="&#129302;">
-            <!--<div id="loading" style="display: none;"><img alt="Loading..." src="/img/loading.gif">
-            </div>-->
 
             <br><br>
 
         </form>
 
     </div>
-    <h2 id="allebilletterback"><span>Alle billetter i backend</span></h2>
+    <h2 id="allebilletterback"><span>Alle billetter</span></h2>
 
     <div class="littpadding">
         <div id="listeback"></div>
     </div>
 
-
     <button class="btn btn-default" id="slettaltback">&#10060;Slett alle billettene i backend</button>
 
-    <br><br>
+    <br>
+    <br>
 
     <script src="js/jquery-3.7.1.min.js" type="application/javascript"></script>
     <script src="js/script.js" type="application/javascript"></script>
     <script src="js/bootstrap.js" type="application/javascript"></script>
-    <!--    <script src="js/npm.js" type="application/javascript"></script>-->
     <script src="js/form-validation.js" type="application/javascript"></script>
 </div>
 </body>

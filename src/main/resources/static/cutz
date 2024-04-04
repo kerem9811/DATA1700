@@ -1,3 +1,14 @@
+  <!--                    <option disabled selected value="">Velg film her</option>-->
+                      <!--<option value="1">2001: A Space Odyssey</option>
+                      <option value="2">Apocalypse Now Redux</option>
+                      <option value="3">The Godfather</option>
+                      <option value="4">Blade Runner</option>
+                      <option value="5">Eternal Sunshine of the Spotless Mind</option>
+                      <option value="6">Manos: The Hands of Fate</option>
+                      <option value="7">Minecraft: The Movie</option>
+                      <option value="8">The Movie Part 2: Electric Boogaloo</option>
+                      <option value="9">Steal This Film</option>-->
+
   async function smallTimeout() {
         console.log('starting timer');
         await new Promise(resolve => setTimeout(resolve, 200));

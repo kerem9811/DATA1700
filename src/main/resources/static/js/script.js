@@ -33,24 +33,16 @@ $('document').ready(async () => {
 
 //     Populate dropdown list with films from backend table.
     async function populateDropdown() {
-        try {
-            await $.getJSON("/films", function (films) {
-                console.log("Received films for dropdown", films);
-
-                let options = $.parseJSON(films);
-                $.each(options, function (film){
-                    $('#film').append('<option value="' + film.id + '">' + film.name + '</option>');
-                });
-
-               /* let options = $.parseJSON(films);
-                $.each(options, function (film) {
-                    $('#film').append('<option value="' + film.id + '">' + film.name + '</option>');
-                });*/
-            })
-        } catch (e) {
-            console.log("Error receicing films to dropdown: " + e);
-            throw e;
-        }
+        await $.getJSON("http://localhost:8080/films", function (films) {
+            console.log("Received films for dropdown", films);
+            $('#film').append('<option disabled selected value="">Velg film her</option>');
+            films.forEach(film => {
+                $('#film').append(`<option value="${film.id}">${film.name}</option>`);
+            });
+        }).fail(function (jqxhr, textStatus, error) {
+            console.error("Error fetching films:", textStatus, error);
+            alert("Failed to populate the dropdown. Check the console logs for errors.");
+        });
     }
 
 //     Create ticket object and send it to the backend
@@ -65,6 +57,7 @@ $('document').ready(async () => {
         }
     }
 
+    // Get the tickets sorted from backend and put into table
     async function getSortedBackend() {
         await $.getJSON("/tickets/allSorted", function (tickets) {
             console.log('Backend tickets received:', tickets);
@@ -101,14 +94,16 @@ $('document').ready(async () => {
         });
     }
 
+    // Clear the table contents
     async function clearTableBackend() {
         $('#listeback').html("");
     }
 
+    // Delete the tickets in backend and then clear table
     async function clearTicketsBackend() {
         await $.post("/tickets/clearback");
         await clearTableBackend();
-        console.log("Deleted tickets in backend :>")
+        await console.log("Deleted tickets in backend :>")
     }
 
 // COMMON ----------------------------------------------------------------------
@@ -129,12 +124,17 @@ $('document').ready(async () => {
         $("#orderform").trigger('reset');
     }
 
-    await populateDropdown();
+    try {
+        await populateDropdown();
+    } catch (e) {
+        alert("Error populating " + e)
+    }
     alert("Document ready");
 
 }); /* End of document ready */
 
 // Sjekking av input ----------------------------------------------------------------------------------
+
 // Sjekking av regex
 const regEx = {
     // Det må velges en film
@@ -266,6 +266,7 @@ async function checkEmail() {
 }
 
 async function checkForm() {
+    // Et array av alle validitets-sjekker
     let validationFunctionsArray = [
         await checkFilm(),
         await checkAmount(),
