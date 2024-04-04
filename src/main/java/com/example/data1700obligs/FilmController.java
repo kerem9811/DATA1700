@@ -19,7 +19,7 @@ public class FilmController {
     @GetMapping("/films")
     public List<Film> getAllFilms(){
         try {
-            List<Film> films =  filmRepository.findAllByNameOrderByName();
+            List<Film> films =  filmRepository.findAll();
             System.out.println("Success getting film list ");
             return films;
         } catch (Exception e){
