@@ -10,7 +10,7 @@
     <link href="css/bootstrap-theme.css" rel="stylesheet" type="text/css">
     <link href="css/form-validation.css" rel="stylesheet" type="text/css">
 
-    <title>DATA1700 - Oblig 1 - Bestilling av kinobilletter</title>
+    <title>DATA1700 - Oblig 3 - Bestilling av kinobilletter gjennom server</title>
 </head>
 
 <body>
@@ -24,7 +24,7 @@
                 <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
 
                 <select class="form-control" id="film" name="films" required>
-<!--                   Is populated automatically from backend -->
+                    <!--                   Is populated automatically from backend -->
                 </select>
 
                 <label class="feilmelding" for="film" id="filmfeilmelding">
@@ -103,8 +103,8 @@
 
             <br>
 
-            <input class="btn btn-default" type="submit" value="&#128722;Kjøp billetter">
-            <input class="btn btn-default" id="autofyll" type="button" value="&#129302;">
+            <input class="btn btn-primary" type="submit" value="&#128722;Kjøp billetter">
+            <input class="btn btn-info" id="autofyll" type="button" value="&#129302;">
 
             <br><br>
 
@@ -117,15 +117,14 @@
         <div id="listeback"></div>
     </div>
 
-    <button class="btn btn-default" id="slettaltback">&#10060;Slett alle billettene i backend</button>
+    <button class="btn btn-danger" id="slettaltback">&#10060;Slett alle billetter</button>
 
     <br>
     <br>
-
-    <script src="js/jquery-3.7.1.min.js" type="application/javascript"></script>
-    <script src="js/script.js" type="application/javascript"></script>
-    <script src="js/bootstrap.js" type="application/javascript"></script>
-    <script src="js/form-validation.js" type="application/javascript"></script>
 </div>
+<script src="js/jquery-3.7.1.min.js" type="application/javascript"></script>
+<script src="js/script.js" type="application/javascript"></script>
+<script src="js/bootstrap.js" type="application/javascript"></script>
+<script src="js/form-validation.js" type="application/javascript"></script>
 </body>
 </html>
