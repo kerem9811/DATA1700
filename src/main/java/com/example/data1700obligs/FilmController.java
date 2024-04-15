@@ -11,8 +11,11 @@ import java.util.List;
 //@RequestMapping("/films")
 public class FilmController {
 
-    @Autowired
-    private FilmRepository filmRepository;
+    private final FilmRepository filmRepository;
+
+    public FilmController(FilmRepository filmRepository) {
+        this.filmRepository = filmRepository;
+    }
 
     @GetMapping("/films")
     public List<Film> getAllFilms() {

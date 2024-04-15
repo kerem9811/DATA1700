@@ -4,6 +4,7 @@ package com.example.data1700obligs;
 import com.example.data1700obligs.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +16,11 @@ import java.util.List;
 public class TicketController {
 
     //    BACKEND -------------------------------------------------------------------------------
-    @Autowired
-    private TicketRepository ticketRepository;
+    private final TicketRepository ticketRepository;
+
+    public TicketController(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
 
     @PostMapping("tickets/addback")
     public void saveTicket(Ticket oneTicket) {
@@ -47,6 +51,16 @@ public class TicketController {
             System.out.println("Success deleting tickets :)");
         } catch (Exception e) {
             System.out.println("Error deleting tickets: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("deleteTicketById")
+    public void deleteTicketById(Long id) {
+        try {
+            ticketRepository.deleteById(id);
+            System.out.println("Ticket with id " + id + " deleted :)");
+        } catch (Exception e) {
+            System.out.println("Error deleting ticket by id: " + e.getMessage());
         }
     }
 }

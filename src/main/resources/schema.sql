@@ -1,5 +1,5 @@
-drop table if exists tickets;
-CREATE TABLE tickets
+-- drop table if exists tickets;
+CREATE TABLE if not exists tickets
 (
     id        IDENTITY     NOT NULL PRIMARY KEY,
     film      VARCHAR(50)  NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE tickets
     email     VARCHAR(100) NOT NULL
 );
 drop table if exists films;
-CREATE TABLE films
+CREATE TABLE if not exists films
 (
     id   identity    not null primary key,
     name varchar(50) not null

@@ -41,7 +41,7 @@ $('document').ready(async () => {
             });
         }).fail(function (jqxhr, textStatus, error) {
             console.error("Error fetching films:", textStatus, error);
-            alert("Failed to populate the dropdown. Check the console logs for errors.");
+            // alert("Failed to populate the dropdown. Check the console logs for errors.");
         });
     }
 
@@ -71,8 +71,8 @@ $('document').ready(async () => {
                 .append('<th>Fornavn</th>')
                 .append('<th>Etternavn</th>')
                 .append('<th>Telefonnummer</th>')
-                .append('<th>Epost</th>');
-
+                .append('<th>Epost</th>')
+                .append('<th>X</th>');
             $table.append($headerRow);
 
             // Add ticket data rows
@@ -83,11 +83,56 @@ $('document').ready(async () => {
                     .append(`<td>${ticket.firstname}</td>`)
                     .append(`<td>${ticket.lastname}</td>`)
                     .append(`<td>${ticket.tel}</td>`)
-                    .append(`<td>${ticket.email}</td>`);
-
+                    .append(`<td>${ticket.email}</td>`)
+                    .append(`<td><input class='btn btn-danger' id='ticket${ticket.id}' type='button' value='X'></td>`);
                 $table.append($row);
             }
+            /*
+//Delete single ticket from db
+async function deleteTicketById(id) {
+   let ticketId = $('#id').val;
+   $('#ticketId').click(ticketId);
+   await $.post("/tickets/deleteTicketById", ticketId);
+   await getSortedBackend();
+}
+await $('#id').click(deleteTicketById($('#id').val));*/
+            /*let ticketId = ticket.id;
+            onclick = "deleteTicketById(ticketId)"
+
+            async function deleteTicketById(id) {
+                await $.post("/tickets/deleteTicketById", ticketId);
+                await getSortedBackend();
+            }*/
+
             $('#listeback').html($table);
+
+            function addRowHandlers() {
+                let table = document.getElementById("listeback");
+                let rows = table.getElementsByClassName("btn btn-danger");
+                /*for (const ticket of tickets) {*/
+                for (const button of rows){
+                    let currentRow = table.rows[]
+
+                    // TODO legg til funksjon for å slette enkeltbillett. Midt i en for loop .
+                }
+                for (i = 0; i < rows.length; i++) {
+                    var currentRow = table.rows[i];
+                    var createClickHandler =
+                        function (row) {
+                            return function () {
+                                var cell = row.getElementsByTagName("td")[0];
+                                var id = cell.innerHTML;
+                                alert("id:" + id);
+                            };
+                        };
+
+                    currentRow.onclick = createClickHandler(currentRow);
+                }
+            }
+
+            window.onload = addRowHandlers();
+
+
         }).fail(function () {
             console.error("Failed to fetch ticket data.");
             alert("Feil med innhenting av billetter fra server :(");
@@ -102,9 +147,13 @@ $('document').ready(async () => {
     // Delete the tickets in backend and then clear table
     async function clearTicketsBackend() {
         await $.post("/tickets/clearback");
+        /*await $.ajax("/tickets/clearback", function () {
+            delete
+        })*/
         await clearTableBackend();
         await console.log("Deleted tickets in backend :>")
     }
+
 
 // COMMON ----------------------------------------------------------------------
 
@@ -124,14 +173,21 @@ $('document').ready(async () => {
         $("#orderform").trigger('reset');
     }
 
+    // The dropdown is populated as the website loads
     try {
         await populateDropdown();
     } catch (e) {
-        alert("Error populating " + e)
+        alert("Error populating " + $.parseJSON(e));
+    }
+    // If the website is reloaded while there are tickets in the db, this will show them in table.
+    try {
+        await getSortedBackend();
+    } catch (e) {
+        alert("Error fetching tickets from backend:" + $.parseJSON(e));
     }
     alert("Document ready");
 
-}); /* End of document ready */
+}); /*//////////---- ....End of document ready..... ----////////////////////////*/
 
 // Sjekking av input ----------------------------------------------------------------------------------
 
