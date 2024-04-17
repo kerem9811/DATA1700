@@ -1,3 +1,49 @@
+ function addRowHandlers() {
+            let table = document.getElementById("listeback");
+            let buttonsInTable = table.getElementsByClassName("btn btn-danger");
+
+            for (let i = 0; i < buttonsInTable.length; i++) {
+                let currentRow = table.rows[i];
+                let createClickHandler =
+                    function (row) {
+                        return function () {
+                            let cell = row.getElementsByTagName("td")[0];
+                            let id = cell.innerHTML;
+                            alert("id:" + id);
+                        };
+                    };
+
+                currentRow.onclick = createClickHandler(currentRow);
+            }
+        }
+
+        window.onload = addRowHandlers();
+
+
+
+ /*
+//Delete single ticket from db
+async function deleteTicketById(id) {
+let ticketId = $('#id').val;
+$('#ticketId').click(ticketId);
+await $.post("/tickets/deleteTicketById", ticketId);
+await getSortedBackend();
+}
+await $('#id').click(deleteTicketById($('#id').val));*/
+        /*let ticketId = ticket.id;
+        onclick = "deleteTicketById(ticketId)"
+
+        async function deleteTicketById(id) {
+            await $.post("/tickets/deleteTicketById", ticketId);
+            await getSortedBackend();
+        }*/
+
+ /*for (const ticket of tickets) {*/
+                 for (const button of buttonsInTable){
+                     let currentRow = table.rows[button];
+                     let createClickHandler =
+                         function ()
+
   <!--                    <option disabled selected value="">Velg film her</option>-->
                       <!--<option value="1">2001: A Space Odyssey</option>
                       <option value="2">Apocalypse Now Redux</option>

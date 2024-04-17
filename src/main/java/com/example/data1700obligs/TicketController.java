@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -23,38 +25,42 @@ public class TicketController {
     }
 
     @PostMapping("tickets/addback")
-    public void saveTicket(Ticket oneTicket) {
+    public ResponseEntity<Void> saveTicket(Ticket oneTicket) {
         try {
             ticketRepository.save(oneTicket);
             System.out.println("Ticket saved in backend :)" + oneTicket);
+            return ResponseEntity.ok().build();  // 200 OK - Success
         } catch (Exception e) {
             System.out.println("Error saving ticket in backend :(" + e.getMessage());
+            return ResponseEntity.internalServerError().build();  // 500 Internal Server Error
         }
     }
 
     @GetMapping("/tickets/allSorted")
-    public List<Ticket> getAllTicketsSorted() {
+    public ResponseEntity<?> getAllTicketsSorted() { // Changed return type
         try {
             List<Ticket> sortedTickets = ticketRepository.findAllByOrderByLastnameAsc();
             System.out.println("Returned all tickets :)");
-            return sortedTickets;
+            return ResponseEntity.ok(sortedTickets);  // 200 OK + list of tickets in the body
         } catch (Exception e) {
             System.out.println("Error returning tickets :(" + e.getMessage());
-            return null;
+            return ResponseEntity.internalServerError().build();
         }
     }
 
-    @PostMapping("/tickets/clearback")
-    public void deleteTicketsBack() {
+    @DeleteMapping("/tickets/clearback")
+    public ResponseEntity<Void> deleteTicketsBack() {
         try {
             ticketRepository.deleteAll();
-            System.out.println("Success deleting tickets :)");
+            System.out.println("Success deleting all tickets :)");
+            return ResponseEntity.noContent().build();  // 204 No Content
         } catch (Exception e) {
             System.out.println("Error deleting tickets: " + e.getMessage());
+            return ResponseEntity.internalServerError().build();
         }
     }
 
-    @PostMapping("deleteTicketById")
+    @DeleteMapping("tickets/deleteTicketById")
     public void deleteTicketById(Long id) {
         try {
             ticketRepository.deleteById(id);

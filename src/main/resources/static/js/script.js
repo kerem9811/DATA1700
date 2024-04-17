@@ -14,12 +14,12 @@ $('document').ready(async () => {
         if (await checkForm()) {
             console.log("Validation succeeded!");
             // Wait for the ticket to be saved, then fetch updated tickets after saving
-            sendTicketBackend().then(getSortedBackend);
             try {
+                await sendTicketBackend().then(getSortedBackend);
                 // Clears the form after the ticket has been sent and the table has been propagated.
                 await clearInputForm();
             } catch (error) {
-                console.error("Failed to save or fetch tickets", error);
+                console.error("Failed to save or fetch tickets: ", error);
                 alert("Error processing your request :(");
             }
         } else {
@@ -27,7 +27,11 @@ $('document').ready(async () => {
             console.log("Validation failed.");
         }
     })
-    $('#slettaltback').click(clearTicketsBackend);
+    // Delete all tickets, then refresh table
+    $('#slettaltback').on('click', async function () {
+        await clearTicketsBackend();
+        await getSortedBackend();
+    });
 
 // BACKEND --------------------------------------------------------------------------------------
 
@@ -41,7 +45,7 @@ $('document').ready(async () => {
             });
         }).fail(function (jqxhr, textStatus, error) {
             console.error("Error fetching films:", textStatus, error);
-            // alert("Failed to populate the dropdown. Check the console logs for errors.");
+            alert("Failed to populate the dropdown with films. Try refreshing the page.");
         });
     }
 
@@ -50,8 +54,9 @@ $('document').ready(async () => {
         try {
             let ticket = await createTicketObject();
             await $.post("/tickets/addback", ticket);
+            console.log("Ticket sent to backend!");
         } catch (e) {
-            alert("Error saving ticket to backend:" + e);
+            alert("Error saving ticket to backend: " + e);
             console.error("Error saving ticket to backend:" + e);
             throw e;
         }
@@ -60,80 +65,65 @@ $('document').ready(async () => {
     // Get the tickets sorted from backend and put into table
     async function getSortedBackend() {
         await $.getJSON("/tickets/allSorted", function (tickets) {
-            console.log('Backend tickets received:', tickets);
+                console.log('Backend tickets received:', tickets);
 
-            const $table = $('<table>').addClass('tftable');
-            const $headerRow = $('<tr>');
+                const $table = $('<table>').addClass('tftable');
+                const $headerRow = $('<tr>');
 
-            // Add header columns
-            $headerRow.append('<th>Fornavn</th>')
-                .append('<th>Antall</th>')
-                .append('<th>Fornavn</th>')
-                .append('<th>Etternavn</th>')
-                .append('<th>Telefonnummer</th>')
-                .append('<th>Epost</th>')
-                .append('<th>X</th>');
-            $table.append($headerRow);
+                // Add header columns
+                $headerRow.append('<th>Fornavn</th>')
+                    .append('<th>Antall</th>')
+                    .append('<th>Fornavn</th>')
+                    .append('<th>Etternavn</th>')
+                    .append('<th>Telefonnummer</th>')
+                    .append('<th>Epost</th>')
+                    .append('<th>&#128465;</th>');
+                $table.append($headerRow);
 
-            // Add ticket data rows
-            for (const ticket of tickets) { // Use 'for...of' loop for array iteration
-                const $row = $('<tr>');
-                $row.append(`<td>${ticket.film}</td>`)
-                    .append(`<td>${ticket.amount}</td>`)
-                    .append(`<td>${ticket.firstname}</td>`)
-                    .append(`<td>${ticket.lastname}</td>`)
-                    .append(`<td>${ticket.tel}</td>`)
-                    .append(`<td>${ticket.email}</td>`)
-                    .append(`<td><input class='btn btn-danger' id='ticket${ticket.id}' type='button' value='X'></td>`);
-                $table.append($row);
-            }
-            /*
-//Delete single ticket from db
-async function deleteTicketById(id) {
-   let ticketId = $('#id').val;
-   $('#ticketId').click(ticketId);
-   await $.post("/tickets/deleteTicketById", ticketId);
-   await getSortedBackend();
-}
-await $('#id').click(deleteTicketById($('#id').val));*/
-            /*let ticketId = ticket.id;
-            onclick = "deleteTicketById(ticketId)"
+                // Add ticket data rows
+                for (const ticket of tickets) { // Use 'for...of' loop for array iteration
+                    const $row = $('<tr>');
+                    $row.append(`<td>${ticket.film}</td>`)
+                        .append(`<td>${ticket.amount}</td>`)
+                        .append(`<td>${ticket.firstname}</td>`)
+                        .append(`<td>${ticket.lastname}</td>`)
+                        .append(`<td>${ticket.tel}</td>`)
+                        .append(`<td>${ticket.email}</td>`)
+                    $table.append($row);
 
-            async function deleteTicketById(id) {
-                await $.post("/tickets/deleteTicketById", ticketId);
-                await getSortedBackend();
-            }*/
+                    // Create the delete button for each ticket
+                    const deleteButton = $(`<input class='btn btn-danger' type='button' value='&#128465;'>`);
 
-            $('#listeback').html($table);
+                    // Add the click handler directly to the button, using its ID
+                    deleteButton.click(async function () {
+                        await deleteTicketById(ticket.id); // Pass the ticket ID
+                        await getSortedBackend();  // Refresh the table
+                    });
 
-            function addRowHandlers() {
-                let table = document.getElementById("listeback");
-                let rows = table.getElementsByClassName("btn btn-danger");
-                /*for (const ticket of tickets) {*/
-                for (const button of rows){
-                    let currentRow = table.rows[]
-
-                    // TODO legg til funksjon for å slette enkeltbillett. Midt i en for loop .
+                    // Add the button in its own cell
+                    $row.append($('<td>').append(deleteButton));
+                    $table.append($row);
                 }
-                for (i = 0; i < rows.length; i++) {
-                    var currentRow = table.rows[i];
-                    var createClickHandler =
-                        function (row) {
-                            return function () {
-                                var cell = row.getElementsByTagName("td")[0];
-                                var id = cell.innerHTML;
-                                alert("id:" + id);
-                            };
-                        };
 
-                    currentRow.onclick = createClickHandler(currentRow);
+                // Create the delete single ticket function in the refresh table function
+                async function deleteTicketById(id) {
+                    try {
+                        await $.ajax({
+                            url: "/tickets/deleteTicketById",
+                            type: 'DELETE',
+                            data: {id: id}
+                        });
+                        console.log("Ticket with ID " + id + " deleted successfully!");
+                    } catch (error) {
+                        console.error("Error deleting ticket with ID " + id + ": ", error);
+                        alert("Error deleting ticket, please try again.");
+                    }
                 }
+
+                // Append the contents of table variable to the table in html.
+                $('#listeback').html($table);
             }
-
-            window.onload = addRowHandlers();
-
-
-        }).fail(function () {
+        ).fail(function () {
             console.error("Failed to fetch ticket data.");
             alert("Feil med innhenting av billetter fra server :(");
         });
@@ -144,21 +134,33 @@ await $('#id').click(deleteTicketById($('#id').val));*/
         $('#listeback').html("");
     }
 
-    // Delete the tickets in backend and then clear table
+    // Delete all tickets from backend
     async function clearTicketsBackend() {
-        await $.post("/tickets/clearback");
-        /*await $.ajax("/tickets/clearback", function () {
-            delete
-        })*/
-        await clearTableBackend();
-        await console.log("Deleted tickets in backend :>")
+        try {
+            await $.ajax({
+                url: "/tickets/clearback",
+                type: "DELETE",
+                success: function (data, textStatus, jqXHR) {
+                    if (jqXHR.status === 204) {
+                        console.log("Ticket deleted successfully!");
+                    } else {
+                        console.error("Error deleting ticket:", textStatus);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error deleting ticket:", errorThrown);
+                }
+            });
+            await clearTableBackend();
+            console.log("Deleted all tickets in backend :>");
+        } catch (error) {
+            console.error("Error clearing tickets:", error);
+        }
     }
 
-
 // COMMON ----------------------------------------------------------------------
-
+    // Create ticket object with input data
     async function createTicketObject() {
-        // Lage billett-objekt med tilhørende verdier
         let ticket = {};
         ticket.film = $("#film  option:selected").text();
         ticket.amount = $("#antall").val();
@@ -173,25 +175,22 @@ await $('#id').click(deleteTicketById($('#id').val));*/
         $("#orderform").trigger('reset');
     }
 
-    // The dropdown is populated as the website loads
+// The dropdown is populated as the website loads
     try {
         await populateDropdown();
     } catch (e) {
-        alert("Error populating " + $.parseJSON(e));
+        alert("Error populating dropdown: " + $.parseJSON(e));
     }
-    // If the website is reloaded while there are tickets in the db, this will show them in table.
+// If the website is reloaded while there are tickets in the db, this will show them in table.
     try {
         await getSortedBackend();
     } catch (e) {
         alert("Error fetching tickets from backend:" + $.parseJSON(e));
     }
     alert("Document ready");
-
 }); /*//////////---- ....End of document ready..... ----////////////////////////*/
 
-// Sjekking av input ----------------------------------------------------------------------------------
-
-// Sjekking av regex
+// Input checking ----------------------------------------------------------------------------------
 const regEx = {
     // Det må velges en film
     film: /[^ ]/, // Antall må være 1-99
@@ -233,7 +232,6 @@ async function checkAmount() {
     return bothOK;
 }
 
-// Funksjon som sjekker fornavn-input
 async function checkFirstname() {
     let firstnameRegex = regEx.name.test($("#fornavn").val());
     let firstnameValidity = document.getElementById('fornavn').checkValidity();
@@ -251,7 +249,6 @@ async function checkFirstname() {
     return bothOK;
 }
 
-// Funksjon som sjekker etternavn-input
 async function checkLastname() {
     let lastnameRegex = regEx.name.test($("#etternavn").val());
     let lastnameValidity = document.getElementById('etternavn').checkValidity();
@@ -269,7 +266,6 @@ async function checkLastname() {
     return bothOK;
 }
 
-// Sjekker telefon-input
 async function checkTelephone() {
     let telRegex = regEx.tel.test($("#tlf").val());
     let telValidity = document.getElementById('tlf').checkValidity();
@@ -287,7 +283,6 @@ async function checkTelephone() {
     return bothOK;
 }
 
-// Sjekker epost-input
 async function checkEmail() {
     let emailRegex = regEx.email.test($("#epost").val());
     let emailValidity = document.getElementById('epost').checkValidity();
