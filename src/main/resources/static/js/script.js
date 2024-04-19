@@ -155,7 +155,6 @@ $('document').ready(async () => {
                     editButton.click(async function () {
                         $("#updateTicketDiv").show();
                         await editTicket(ticket.id);
-                        // TODO make the select option choose the right film in dropdown
                         $('#edit-film').val(ticket.filmid);
                     });
                     // await getSortedBackend();
