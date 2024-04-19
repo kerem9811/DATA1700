@@ -6,7 +6,7 @@ GitHub brukernavn: kerem9811
 
 Github repo URL: https://github.com/kerem9811/DATA1700
 
-YouTube unlisted video: https://www.youtube.com/watch?v=QH6sNsO6lXw <--CHANGE
+YouTube unlisted video: https://youtu.be/IIu7TMoZs90
 
 Fullt navn: Ken Solbakken Remen
 
