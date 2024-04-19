@@ -2,6 +2,7 @@
 CREATE TABLE if not exists tickets
 (
     id        IDENTITY     NOT NULL PRIMARY KEY,
+    filmid    INT          NOT NULL,
     film      VARCHAR(50)  NOT NULL,
     amount    INT          NOT NULL CHECK (amount >= 0),
     firstname VARCHAR(50)  NOT NULL,

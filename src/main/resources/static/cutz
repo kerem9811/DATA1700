@@ -1,3 +1,17 @@
+    @PutMapping("/tickets/update/{id}")
+    public ResponseEntity<Void> updateTicketStatus(@PathVariable Long id, @RequestBody Map<String, String> updateData) {
+        Optional<Ticket> ticketToUpdate = ticketRepository.findById(id);
+        if (ticketToUpdate.isPresent()) {
+            Ticket ticket = ticketToUpdate.get();
+//            ticketRepository.
+//            ticket.setStatus(updateData.get("newStatus"));
+            ticketRepository.save(ticket);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
  function addRowHandlers() {
             let table = document.getElementById("listeback");
             let buttonsInTable = table.getElementsByClassName("btn btn-danger");

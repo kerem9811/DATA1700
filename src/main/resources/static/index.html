@@ -14,112 +14,176 @@
 </head>
 
 <body>
-<div id="img" class="container-fluid">
-    <h1 id="h1"><span>Bestilling av kinobilletter</span></h1>
-
+<div class="container-fluid" id="img">
     <div id="width500">
-        <form class="form-group" id="orderform"><!--novalidate-->
+        <nav><h1 id="h1"><span>&#127910; KINO &#127910;</span></h1></nav>
 
-            <div class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
+        <section id="ticket-order-section">
+            <h2 id="h2"><span>&#127915; Bestille Billetter &#127915;</span></h2>
 
-                <select class="form-control" id="film" name="films" required onchange="checkFilm()">
-                    <!--                   Is populated automatically from backend -->
-                </select>
+            <form class="form-group" id="orderform">
 
-                <label class="feilmelding" for="film" id="filmfeilmelding">
-                    <div class="popup">
-                        <span class="popuptext" id="filmPopup">Du må velge en film</span>
-                    </div>
-                </label>
-            </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
+                    <select class="form-control" id="film" name="films" onchange="checkFilm()" required>
+                        <!--                   Is populated automatically from backend -->
+                    </select>
 
-            <br>
+                    <label class="feilmelding" for="film" id="filmfeilmelding">
+                        <div class="popup">
+                            <span class="popuptext" id="filmPopup">Du må velge en film</span>
+                        </div>
+                    </label>
+                </div>
 
-            <div class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                <input class="form-control" id="antall" max="99" min="1" onchange="checkAmount()"
-                       placeholder="Antall" required
-                       title="Velg antall billetter (1-99)" type="number"/>
-                <label class="feilmelding" for="antall" id="antallfeilmelding">
-                    <div class="popup">
-                        <span class="popuptext" id="antallPopup">Du må velge antall mellom 1-99</span>
-                    </div>
-                </label>
-            </div>
+                <br>
 
-            <br>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
+                    <input class="form-control" id="antall" max="99" min="1" onchange="checkAmount()"
+                           placeholder="Antall" required
+                           title="Velg antall billetter (1-99)" type="number"/>
+                    <label class="feilmelding" for="antall" id="antallfeilmelding">
+                        <div class="popup">
+                            <span class="popuptext" id="antallPopup">Du må velge antall mellom 1-99</span>
+                        </div>
+                    </label>
+                </div>
 
-            <div class="input-group">
-                <!-- https://www.glyphicons.com/ -->
-                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input class="form-control" id="fornavn" name="fornavn" onchange="checkFirstname()"
-                       placeholder="Fornavn"
-                       required title="Skriv inn fornavn" type="text"/>
-                <label class="feilmelding" for="fornavn" id="fornavnfeilmelding">
-                    <div class="popup">
-                        <span class="popuptext" id="fornavnPopup">Du må skrive fornavn</span>
-                    </div>
-                </label>
+                <br>
 
-            </div>
+                <div class="input-group">
+                    <!-- https://www.glyphicons.com/ -->
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input class="form-control" id="fornavn" name="fornavn" onchange="checkFirstname()"
+                           placeholder="Fornavn"
+                           required title="Skriv inn fornavn" type="text"/>
+                    <label class="feilmelding" for="fornavn" id="fornavnfeilmelding">
+                        <div class="popup">
+                            <span class="popuptext" id="fornavnPopup">Du må skrive fornavn</span>
+                        </div>
+                    </label>
 
-            <div class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input class="form-control" id="etternavn" name="etternavn" onchange="checkLastname()"
-                       placeholder="Etternavn" required
-                       title="Skriv inn etternavn" type="text"/>
-                <label class="feilmelding" for="etternavn" id="etternavnfeilmelding">
-                    <div class="popup">
-                        <span class="popuptext" id="etternavnPopup">Du må skrive etternavn</span>
-                    </div>
-                </label>
-            </div>
+                </div>
 
-            <div class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-                <input class="form-control" id="tlf" name="tlf" onchange="checkTelephone()"
-                       pattern="[2-7,9]\d{7}|(?:\+|00)\d{6,}" placeholder="Telefonnummer"
-                       required title="Norsk eller internasjonalt telefonnummer" type="tel"/>
-                <label class="feilmelding" for="tlf" id="tlffeilmelding">
-                    <div class="popup">
-                        <span class="popuptext" id="tlfPopup">Du må skrive et gyldig telefonnummer</span>
-                    </div>
-                </label>
-            </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input class="form-control" id="etternavn" name="etternavn" onchange="checkLastname()"
+                           placeholder="Etternavn" required
+                           title="Skriv inn etternavn" type="text"/>
+                    <label class="feilmelding" for="etternavn" id="etternavnfeilmelding">
+                        <div class="popup">
+                            <span class="popuptext" id="etternavnPopup">Du må skrive etternavn</span>
+                        </div>
+                    </label>
+                </div>
 
-            <div class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                <input class="form-control" id="epost" name="epost"
-                       onchange="checkEmail()"
-                       pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$" placeholder="E-post"
-                       required title="Skriv inn epost" type="email"/>
-                <label class="feilmelding" for="epost" id="epostfeilmelding">
-                    <div class="popup">
-                        <span class="popuptext" id="epostPopup">Du må skrive en gyldig epostadresse</span>
-                    </div>
-                </label>
-            </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                    <input class="form-control" id="tlf" name="tlf" onchange="checkTelephone()"
+                           pattern="[2-7,9]\d{7}|(?:\+|00)\d{6,}" placeholder="Telefonnummer"
+                           required
+                           title="Norsk eller internasjonalt telefonnummer med 8 siffer, må starte med 2-7 eller 9."
+                           type="tel"/>
+                    <label class="feilmelding" for="tlf" id="tlffeilmelding">
+                        <div class="popup">
+                            <span class="popuptext" id="tlfPopup">Du må skrive et gyldig telefonnummer</span>
+                        </div>
+                    </label>
+                </div>
 
-            <br>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input class="form-control" id="epost" name="epost"
+                           onchange="checkEmail()"
+                           pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$" placeholder="E-post"
+                           required title="Skriv inn epost" type="email"/>
+                    <label class="feilmelding" for="epost" id="epostfeilmelding">
+                        <div class="popup">
+                            <span class="popuptext" id="epostPopup">Du må skrive en gyldig epostadresse</span>
+                        </div>
+                    </label>
+                </div>
 
-            <input class="btn btn-primary" type="submit" value="&#128722;Kjøp billetter">
-            <input class="btn btn-info" id="autofyll" type="button" value="&#129302;">
+                <br>
 
-            <br><br>
+                <input class="btn btn-primary" type="submit" value="&#128722;Kjøp billetter">
+                <input class="btn btn-info" id="autofyll" type="button" value="&#129302;">
 
-        </form>
+                <br><br>
 
+            </form>
+        </section>
     </div>
-    <h2 id="allebilletterback"><span>Alle billetter</span></h2>
+        <h2 id="allebilletterback"><span>&#127903; Alle Billetter &#127903;</span></h2>
 
-    <div class="littpadding">
-        <div id="listeback"></div>
+        <div class="littpadding">
+            <div id="listeback"></div>
+        </div>
+
+        <button class="btn btn-danger" id="slettaltback">&#10060;Slett alle billetter</button>
+
+    <div id="edit-width500">
+        <div id="updateTicketDiv" style="display: none">
+            <h2 id="editTicketsH2"><span>&#128221; Redigere Billett &#128221;</span></h2>
+
+            <form class="form-group" id="edit-orderform">
+
+                <div class="input-group">
+                    <input id="edit-id" type="hidden">
+                </div>
+                <div class="input-group">
+                    <input id="edit-filmid" type="hidden">
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
+                    <select class="form-control" id="edit-film" name="films" required>
+                        <!--                   Is populated automatically from backend -->
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
+                    <input class="form-control" id="edit-antall" max="99" min="1" required
+                           title="Velg antall billetter (1-99)" type="number"/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input class="form-control" id="edit-fornavn" name="fornavn" required title="Skriv inn fornavn"
+                           type="text"/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input class="form-control" id="edit-etternavn" name="etternavn" required
+                           title="Skriv inn etternavn" type="text"/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                    <input class="form-control" id="edit-tlf" name="tlf"
+                           pattern="[2-7,9]\d{7}|(?:\+|00)\d{6,}" required
+                           title="Norsk eller internasjonalt telefonnummer med 8 siffer, må starte med 2-7 eller 9."
+                           type="tel"/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input class="form-control" id="edit-epost" name="epost"
+                           pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"
+                           required title="Skriv inn en gyldig epostadresse." type="email"/>
+                </div>
+                <button class="btn btn-success" id="save-edit-btn" type="submit">&#128190; Lagre endringer</button>
+
+                <br>
+                <br>
+
+            </form>
+
+        </div>
     </div>
-
-    <button class="btn btn-danger" id="slettaltback">&#10060;Slett alle billetter</button>
-
-
     <br>
     <br>
 </div>

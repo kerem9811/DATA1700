@@ -4,12 +4,16 @@
 
 $('document').ready(async () => {
     // An autofill button for faster debugging
-    $('#autofyll').click(autoFillInfo);
+    $('#autofyll').click(function () {
+        autoFillInfo();
+        $('#updateTicketDiv').hide(); // Hide edit form
+    });
 
     // Submit form button event
     $('#orderform').submit(async event => {
         // Prevent default behaviour, instead do as below.
         event.preventDefault();
+        $('#updateTicketDiv').hide(); // Hide edit form
         // Check form validity on submit
         if (await checkForm()) {
             console.log("Validation succeeded!");
@@ -26,7 +30,49 @@ $('document').ready(async () => {
             alert("Du må sjekke input :(");
             console.log("Validation failed.");
         }
-    })
+    });
+
+    // Save edits button
+    /*$('#save-edit-btn').click(async function () {*/
+    $('#edit-orderform').submit(async event => {
+        event.preventDefault();
+        try {
+            // Create data object
+            let updatedTicket = createTicketObjectFromEditForm();
+            // Change ticket in backend, then update table
+            await updateTicketBackend(updatedTicket).then(getSortedBackend);
+            // Hide edit form
+            $('#updateTicketDiv').hide();
+        } catch (error) {
+            console.error("Error updating ticket:", error);
+            alert("Error while saving edits. Please try again.");
+        }
+    });
+
+    // Get data from the form
+    function createTicketObjectFromEditForm() {
+        const ticket = {};
+        ticket.id = $('#edit-id').val();
+        ticket.filmid = $('#edit-film option:selected').val();
+        ticket.film = $('#edit-film option:selected').text();
+        ticket.amount = $('#edit-antall').val();
+        ticket.firstname = $('#edit-fornavn').val();
+        ticket.lastname = $('#edit-etternavn').val();
+        ticket.tel = $('#edit-tlf').val();
+        ticket.email = $('#edit-epost').val();
+        return ticket;
+    }
+
+    // Send updated data to backend (PUT request)
+    async function updateTicketBackend(ticket) {
+        await $.ajax({
+            url: `/tickets/${ticket.id}`,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(ticket)
+        });
+    }
+
     // Delete all tickets, then refresh table
     $('#slettaltback').on('click', async function () {
         await clearTicketsBackend();
@@ -40,9 +86,12 @@ $('document').ready(async () => {
         await $.getJSON("http://localhost:8080/films", function (films) {
             console.log("Received films for dropdown", films);
             $('#film').append('<option disabled selected value="">Velg film her</option>');
+            $('#edit-film').append('<option disabled selected value="">Velg film her</option>');
             films.forEach(film => {
                 $('#film').append(`<option value="${film.id}">${film.name}</option>`);
-            });
+                $('#edit-film').append(`<option value="${film.id}">${film.name}</option>`);
+            })
+            // return films;
         }).fail(function (jqxhr, textStatus, error) {
             console.error("Error fetching films:", textStatus, error);
             alert("Failed to populate the dropdown with films. Try refreshing the page.");
@@ -77,7 +126,8 @@ $('document').ready(async () => {
                     .append('<th>Etternavn</th>')
                     .append('<th>Telefonnummer</th>')
                     .append('<th>Epost</th>')
-                    .append('<th>&#128465;</th>');
+                    .append('<th>&#128465;</th>')
+                    .append('<th>&#x270D;</th>');
                 $table.append($headerRow);
 
                 // Add ticket data rows
@@ -93,31 +143,27 @@ $('document').ready(async () => {
 
                     // Create the delete button for each ticket
                     const deleteButton = $(`<input class='btn btn-danger' type='button' value='&#128465;'>`);
+                    // Create the edit button for each ticket
+                    const editButton = $(`<input class='btn btn-info' type='button' value='&#x270D;'>`);
 
                     // Add the click handler directly to the button, using its ID
                     deleteButton.click(async function () {
                         await deleteTicketById(ticket.id); // Pass the ticket ID
                         await getSortedBackend();  // Refresh the table
                     });
+                    // Add the click handler for editing
+                    editButton.click(async function () {
+                        $("#updateTicketDiv").show();
+                        await editTicket(ticket.id);
+                        // TODO make the select option choose the right film in dropdown
+                        $('#edit-film').val(ticket.filmid);
+                    });
+                    // await getSortedBackend();
 
                     // Add the button in its own cell
                     $row.append($('<td>').append(deleteButton));
+                    $row.append($('<td>').append(editButton));
                     $table.append($row);
-                }
-
-                // Create the delete single ticket function in the refresh table function
-                async function deleteTicketById(id) {
-                    try {
-                        await $.ajax({
-                            url: "/tickets/deleteTicketById",
-                            type: 'DELETE',
-                            data: {id: id}
-                        });
-                        console.log("Ticket with ID " + id + " deleted successfully!");
-                    } catch (error) {
-                        console.error("Error deleting ticket with ID " + id + ": ", error);
-                        alert("Error deleting ticket, please try again.");
-                    }
                 }
 
                 // Append the contents of table variable to the table in html.
@@ -129,12 +175,12 @@ $('document').ready(async () => {
         });
     }
 
-    // Clear the table contents
+// Clear the table contents
     async function clearTableBackend() {
         $('#listeback').html("");
     }
 
-    // Delete all tickets from backend
+// Delete all tickets from backend
     async function clearTicketsBackend() {
         try {
             await $.ajax({
@@ -153,15 +199,17 @@ $('document').ready(async () => {
             });
             await clearTableBackend();
             console.log("Deleted all tickets in backend :>");
+            $("#updateTicketDiv").hide();
         } catch (error) {
             console.error("Error clearing tickets:", error);
         }
     }
 
 // COMMON ----------------------------------------------------------------------
-    // Create ticket object with input data
+// Create ticket object with input data
     async function createTicketObject() {
         let ticket = {};
+        ticket.filmid = $("#film  option:selected").val();
         ticket.film = $("#film  option:selected").text();
         ticket.amount = $("#antall").val();
         ticket.firstname = $("#fornavn").val();
@@ -173,7 +221,49 @@ $('document').ready(async () => {
 
     async function clearInputForm() {
         $("#orderform").trigger('reset');
+        $("#edit-orderform").trigger('reset');
     }
+
+    // delete single ticket function
+    async function deleteTicketById(id) {
+        try {
+            await $.ajax({
+                url: "/tickets/deleteTicketById",
+                type: 'DELETE',
+                data: {id: id}
+            });
+            console.log("Ticket with ID " + id + " deleted successfully!");
+            $("#updateTicketDiv").hide();
+        } catch (error) {
+            console.error("Error deleting ticket with ID " + id + ": ", error);
+            alert("Error deleting ticket, please try again.");
+        }
+    }
+
+    // Function to edit ticket
+    async function editTicket(id) {
+        try {
+            let ticket = await $.getJSON(`/tickets/${id}`);
+
+            // Populate form fields:
+            $('#edit-id').val(ticket.id);
+            $('#edit-filmid').val(ticket.filmid);
+            $('#edit-film').val(ticket.film);
+            $('#edit-antall').val(ticket.amount);
+            $('#edit-fornavn').val(ticket.firstname);
+            $('#edit-etternavn').val(ticket.lastname);
+            $('#edit-tlf').val(ticket.tel);
+            $('#edit-epost').val(ticket.email);
+
+            // Show the edit form
+            $("#updateTicketDiv").show();
+        } catch
+            (error) {
+            console.error("Error fetching ticket with ID " + id + ": ", error);
+            alert("Error editing ticket, please try again.");
+        }
+    }
+
 
 // The dropdown is populated as the website loads
     try {
@@ -187,8 +277,13 @@ $('document').ready(async () => {
     } catch (e) {
         alert("Error fetching tickets from backend:" + $.parseJSON(e));
     }
+
+    // Show alert for debugging
     alert("Document ready");
-}); /*//////////---- ....End of document ready..... ----////////////////////////*/
+});
+
+
+/*//////////---- ....End of document ready..... ----////////////////////////*/
 
 // Input checking ----------------------------------------------------------------------------------
 const regEx = {

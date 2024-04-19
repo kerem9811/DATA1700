@@ -2,16 +2,14 @@ package com.example.data1700obligs;
 
 
 import com.example.data1700obligs.repositories.TicketRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -61,12 +59,45 @@ public class TicketController {
     }
 
     @DeleteMapping("tickets/deleteTicketById")
-    public void deleteTicketById(Long id) {
+    public ResponseEntity<Void> deleteTicketById(@RequestParam("id") Long id) {
         try {
             ticketRepository.deleteById(id);
             System.out.println("Ticket with id " + id + " deleted :)");
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } catch (EmptyResultDataAccessException e) {
+            System.err.println("Error deleting ticket by id: " + id + " - Ticket may not exist."); // Error logging
+            return ResponseEntity.notFound().build(); // 404 Not Found
         } catch (Exception e) {
-            System.out.println("Error deleting ticket by id: " + e.getMessage());
+            System.out.println("Error deleting ticket by id: " + e.getMessage()); // Error logging
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/tickets/{id}")
+    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
+        Optional<Ticket> ticket = ticketRepository.findById(id);
+        return ticket.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
+    @PutMapping("/tickets/{id}")
+    public ResponseEntity<Void> updateTicketById(@PathVariable Long id, @RequestBody Ticket updatedTicket) {
+        Optional<Ticket> ticketToUpdate = ticketRepository.findById(id);
+        if (ticketToUpdate.isPresent()) {
+            Ticket ticket = ticketToUpdate.get();
+
+            // Update the ticket fields:
+            ticket.setFilm(updatedTicket.getFilm());
+            ticket.setAmount(updatedTicket.getAmount());
+            ticket.setFirstname(updatedTicket.getFirstname());
+            ticket.setLastname(updatedTicket.getLastname());
+            ticket.setTel(updatedTicket.getTel());
+            ticket.setEmail(updatedTicket.getEmail());
+
+            ticketRepository.save(ticket);
+            return ResponseEntity.ok().build(); // 200 OK
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

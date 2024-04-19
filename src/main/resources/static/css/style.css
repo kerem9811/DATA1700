@@ -19,7 +19,7 @@ body {
     height              : 100%;
     }
 
-#width500 {
+#width500, #edit-width500 {
     max-width : 500px;
     }
 
@@ -32,7 +32,7 @@ body {
     font-weight : bold;
     }
 
-#h1, #allebilletter, #allebilletterback {
+#h1, #h2, h2, #allebilletter, #allebilletterback, #editTicketsH2 {
     font-weight : bold;
     text-shadow : 1px 1px 2px whitesmoke, 0 0 1em dimgray, 0 0 0.2em dimgray;
     text-align  : center;

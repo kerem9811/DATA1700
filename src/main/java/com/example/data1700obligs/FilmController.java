@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-//@RequestMapping("/films")
 public class FilmController {
+
+//    "Field Injection not recommended"
+   /* @Autowired
+    FilmRepository filmrep;*/
 
     private final FilmRepository filmRepository;
 
