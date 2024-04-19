@@ -4,9 +4,9 @@ OsloMet brukernavn: kerem9811
 
 GitHub brukernavn: kerem9811
 
-Github repo URL: https://github.com/kerem9811/DATA1700/tree/oblig3
+Github repo URL: https://github.com/kerem9811/DATA1700
 
-YouTube unlisted video: https://www.youtube.com/watch?v=QH6sNsO6lXw
+YouTube unlisted video: https://www.youtube.com/watch?v=QH6sNsO6lXw <--CHANGE
 
 Fullt navn: Ken Solbakken Remen
 
@@ -16,5 +16,7 @@ Den inneholder frontend med webside, styling og script, i tillegg til en backend
 Film-listen blir auto-populated fra en backend tabell. 
 Så fyller man inn personalia og bestiller billett. 
 Inndata blir validert med regex-sjekk, og blir så lagret i backend på en H2 server. 
-Deretter blir en tabell laget med bakgrunn i data fra backend. 
+Deretter blir en tabell laget med bakgrunn i data fra backend.
+Man kan slette en enkelt billett, eller alle billetter.
+Man kan også endre billetter.
 Når man sletter billetter blir data i backend også slettet.
