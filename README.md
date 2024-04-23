@@ -18,5 +18,5 @@ Så fyller man inn personalia og bestiller billett.
 Inndata blir validert med regex-sjekk, og blir så lagret i backend på en H2 server. 
 Deretter blir en tabell laget med bakgrunn i data fra backend.
 Man kan slette en enkelt billett, eller alle billetter.
-Man kan også endre billetter.
+Man kan også endre billetter, med andre ord full CRUD-kapabilitet.
 Når man sletter billetter blir data i backend også slettet.
