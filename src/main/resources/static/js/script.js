@@ -263,6 +263,11 @@ $('document').ready(async () => {
         }
     }
 
+    $('#film').on('change', function() {
+        const selectedFilm = $(this).val();
+        updateBackgroundImage(selectedFilm);
+    });
+
 
 // The dropdown is populated as the website loads
     try {
@@ -399,6 +404,31 @@ async function checkForm() {
     let validationFunctionsArray = [await checkFilm(), await checkAmount(), await checkFirstname(), await checkLastname(), await checkTelephone(), await checkEmail(),]
     // Hvis alle verdier kommer tilbake som sanne blir total-verdien også sann
     return !validationFunctionsArray.includes(false);
+}
+
+// Background images for films
+const filmImages = {
+    "2001: A Space Odyssey": "../img/2001_a_space_odyssey.jpg",
+    "Apocalypse Now Redux": "../img/apocalypse_now_redux.jpg",
+    "The Godfather": "../img/the_godfather.jpg",
+    "Blade Runner": "../img/blade_runner.jpg",
+    "Eternal Sunshine of the Spotless Mind": "../img/eternal_sunshine_of_the_spotless_mind.jpg",
+    "Manos: The Hands of Fate": "../img/manos_the_hands_of_fate.jpg",
+    "Minecraft: The Movie": "../img/minecraft_the_movie.jpg",
+    "The Movie Part 2: Electric Boogaloo": "../img/the_movie_part_2_electric_boogaloo.jpg",
+    "Steal This Film": "../img/steal_this_film.jpg"
+};
+
+
+function updateBackgroundImage(filmName) {
+    if (filmImages[filmName]) {
+        const imageUrl = filmImages[filmName];
+        $('#img').css('background-image', `url(${imageUrl})`);
+    } else {
+        $('#img').css('background-image', 'url("../img/movieroll.webp")');
+        // Handle the case where there's no image for the selected film
+        console.warn("No image found for film:", filmName);
+    }
 }
 
 // Fyll ut info knapp, for å slippe å skrive inn hver eneste gang :)
