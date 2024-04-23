@@ -7,6 +7,7 @@ $('document').ready(async () => {
     $('#autofyll').click(function () {
         autoFillInfo();
         $('#updateTicketDiv').hide(); // Hide edit form
+        $('#film').trigger('change'); // Change background image
     });
 
     // Submit form button event
@@ -14,6 +15,7 @@ $('document').ready(async () => {
         // Prevent default behaviour, instead do as below.
         event.preventDefault();
         $('#updateTicketDiv').hide(); // Hide edit form
+        $('#img').css('background-image', 'url("../img/movieroll.webp")'); // Change background img
         // Check form validity on submit
         if (await checkForm()) {
             console.log("Validation succeeded!");
@@ -43,6 +45,7 @@ $('document').ready(async () => {
             await updateTicketBackend(updatedTicket).then(getSortedBackend);
             // Hide edit form
             $('#updateTicketDiv').hide();
+            $('#img').css('background-image', 'url("../img/movieroll.webp")');
         } catch (error) {
             console.error("Error updating ticket:", error);
             alert("Error while saving edits. Please try again.");
@@ -77,6 +80,7 @@ $('document').ready(async () => {
     $('#slettaltback').on('click', async function () {
         await clearTicketsBackend();
         await getSortedBackend();
+        $('#img').css('background-image', 'url("../img/movieroll.webp")');
     });
 
 // BACKEND --------------------------------------------------------------------------------------
@@ -263,10 +267,24 @@ $('document').ready(async () => {
         }
     }
 
+    // If user selects in dropdown, background image changes
     $('#film').on('change', function() {
         const selectedFilm = $(this).val();
         updateBackgroundImage(selectedFilm);
     });
+    // The function to change background image.
+    function updateBackgroundImage(filmName) {
+        if (filmImages[filmName]) {
+            const imageUrl = filmImages[filmName];
+            console.log("Selected film:", filmName); // Check the exact film name
+            console.log("Image exists:", filmImages[filmName]); // Check if the image is found
+            $('#img').css('background-image', `url(${imageUrl})`);
+        } else {
+            $('#img').css('background-image', 'url("../img/movieroll.webp")');
+            // Handle the case where there's no image for the selected film
+            console.warn("No image found for film:", filmName);
+        }
+    }
 
 
 // The dropdown is populated as the website loads
@@ -408,28 +426,16 @@ async function checkForm() {
 
 // Background images for films
 const filmImages = {
-    "2001: A Space Odyssey": "../img/2001_a_space_odyssey.jpg",
-    "Apocalypse Now Redux": "../img/apocalypse_now_redux.jpg",
-    "The Godfather": "../img/the_godfather.jpg",
-    "Blade Runner": "../img/blade_runner.jpg",
-    "Eternal Sunshine of the Spotless Mind": "../img/eternal_sunshine_of_the_spotless_mind.jpg",
-    "Manos: The Hands of Fate": "../img/manos_the_hands_of_fate.jpg",
-    "Minecraft: The Movie": "../img/minecraft_the_movie.jpg",
-    "The Movie Part 2: Electric Boogaloo": "../img/the_movie_part_2_electric_boogaloo.jpg",
-    "Steal This Film": "../img/steal_this_film.jpg"
+    1: "../img/2001_a_space_odyssey.webp",
+    2: "../img/apocalypse_now_redux.webp",
+    3: "../img/the_godfather.webp",
+    4: "../img/blade_runner.webp",
+    5: "../img/eternal_sunshine_of_the_spotless_mind.webp",
+    6: "../img/manos_the_hands_of_fate.webp",
+    7: "../img/minecraft_the_movie.webp",
+    8: "../img/the_movie_part_2_electric_boogaloo.webp",
+    9: "../img/steal_this_film.webp"
 };
-
-
-function updateBackgroundImage(filmName) {
-    if (filmImages[filmName]) {
-        const imageUrl = filmImages[filmName];
-        $('#img').css('background-image', `url(${imageUrl})`);
-    } else {
-        $('#img').css('background-image', 'url("../img/movieroll.webp")');
-        // Handle the case where there's no image for the selected film
-        console.warn("No image found for film:", filmName);
-    }
-}
 
 // Fyll ut info knapp, for å slippe å skrive inn hver eneste gang :)
 async function autoFillInfo() {
