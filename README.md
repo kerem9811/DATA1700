@@ -1,22 +1,22 @@
-Oblig DATA1700
+Oblig 3 - DATA1700
 =======
-OsloMet brukernavn: kerem9811
+OsloMet username: kerem9811
 
-GitHub brukernavn: kerem9811
+GitHub username: kerem9811
 
 Github repo URL: https://github.com/kerem9811/DATA1700
 
 YouTube unlisted video: https://youtu.be/IIu7TMoZs90
 
-Fullt navn: Ken Solbakken Remen
+Full name: Ken Solbakken Remen
 
-Kort beskrivelse av applikasjon:
-Dette er en applikasjon som registrerer kjøp av kinobilletter. 
-Den inneholder frontend med webside, styling og script, i tillegg til en backend H2 server. 
-Film-listen blir auto-populated fra en backend tabell. 
-Så fyller man inn personalia og bestiller billett. 
-Inndata blir validert med regex-sjekk, og blir så lagret i backend på H2-serveren. 
-Deretter blir en tabell laget i frontend med bakgrunn i data fra backend.
-Man kan slette en enkelt billett, eller alle billetter.
-Man kan også endre billetter, med andre ord full CRUD-kapabilitet.
-Når man sletter billetter blir data i backend også slettet.
+Brief description of application:
+This application is designed to manage cinema ticket purchases.
+It encompasses a frontend with a web page, styling, and script, along with a backend H2 server.
+The movie list is automatically populated from a backend table.
+Users can then enter their personal information and place an order for tickets.
+Input data is validated using regular expression checks and then stored on the backend H2 server.
+Subsequently, a table is generated in the frontend based on data from the backend.
+Users can delete individual tickets or all tickets at once.
+They can also modify tickets, providing full CRUD (Create, Read, Update, Delete) capabilities.
+When tickets are deleted or updated, the corresponding data is also removed from or updated in the backend.
