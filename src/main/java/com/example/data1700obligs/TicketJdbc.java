@@ -7,18 +7,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
 @AllArgsConstructor
 @Data
-@Entity
-@Table(name = "tickets")
-public class Ticket {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+@Table(name = "ticketsjdbc")
+public class TicketJdbc {
     private Long id;
 
-    private Integer filmid;
-
+    @Setter
     @NotBlank
     private String film;
 
@@ -40,7 +39,7 @@ public class Ticket {
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
     private String email;
 
-    public Ticket() {
+    public TicketJdbc() {
+
     }
 }
-

@@ -107,6 +107,7 @@ $('document').ready(async () => {
         try {
             let ticket = await createTicketObject();
             await $.post("/tickets/addback", ticket);
+            await $.post("/tickets/addbackJdbc", ticket);
             console.log("Ticket sent to backend!");
         } catch (e) {
             alert("Error saving ticket to backend: " + e);
@@ -118,6 +119,7 @@ $('document').ready(async () => {
     // Get the tickets sorted from backend and put into table
     async function getSortedBackend() {
         await $.getJSON("/tickets/allSorted", function (tickets) {
+        // await $.getJSON("/tickets/allSortedJdbc", function (tickets) {
                 console.log('Backend tickets received:', tickets);
 
                 const $table = $('<table>').addClass('tftable');
