@@ -107,7 +107,7 @@
 
                 <br>
 
-                <input class="btn btn-primary" type="submit" value="&#128722;Kjøp billetter">
+                <input class="btn btn-primary" type="submit" value="&#128722;Legg til handlekurv">
                 <input class="btn btn-info" id="autofyll" type="button" value="&#129302;">
 
                 <br><br>
@@ -115,14 +115,16 @@
             </form>
         </section>
     </div>
-        <h2 id="allebilletterback"><span>&#127903; Alle Billetter &#127903;</span></h2>
+    <div id="handlekurv" style="display: none">
+        <h2 id="allebilletterback"><span>&#127903; Handlekurv &#127903;</span></h2>
 
         <div class="littpadding">
             <div id="listeback"></div>
         </div>
 
+        <button class="btn btn-success" id="buytickets">&#128722;Kjøp alle billetter</button>
         <button class="btn btn-danger" id="slettaltback">&#10060;Slett alle billetter</button>
-
+    </div>
     <div id="edit-width500">
         <div id="updateTicketDiv" style="display: none">
             <h2 id="editTicketsH2"><span>&#128221; Redigere Billett &#128221;</span></h2>

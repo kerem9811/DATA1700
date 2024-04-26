@@ -8,7 +8,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +15,6 @@ import java.util.Optional;
 @Validated
 @RestController
 public class TicketController {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private TicketJdbcRepository ticketJdbcRepository;
@@ -37,6 +33,7 @@ public class TicketController {
             return ResponseEntity.internalServerError().build();  // 500 Internal Server Error
         }
     }
+
     @PostMapping("tickets/addbackJdbc")
     public ResponseEntity<Void> saveTicket(TicketJdbc oneTicket) {
         try {
@@ -60,6 +57,7 @@ public class TicketController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
     @GetMapping("/tickets/allSortedJdbc")
     public ResponseEntity<?> getAllTicketsSortedJdbc() {
         try {
@@ -83,6 +81,7 @@ public class TicketController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
     @DeleteMapping("/tickets/clearbackJdbc")
     public ResponseEntity<Void> deleteTicketsBackJdbc() {
         try {
@@ -109,6 +108,7 @@ public class TicketController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
     @DeleteMapping("tickets/deleteTicketByIdJdbc")
     public ResponseEntity<Void> deleteTicketByIdJdbc(@RequestParam("id") Long id) {
         try {
@@ -123,11 +123,13 @@ public class TicketController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
     @GetMapping("/tickets/{id}")
     public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
         return ticket.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @GetMapping("/ticketsJdbc/{id}")
     public ResponseEntity<TicketJdbc> getTicketByIdJdbc(@PathVariable Long id) {
         Optional<TicketJdbc> ticket = ticketJdbcRepository.findById(id);
@@ -154,6 +156,7 @@ public class TicketController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PutMapping("/ticketsJdbc/{id}")
     public ResponseEntity<Void> updateTicketByIdJdbc(@PathVariable Long id, @RequestBody TicketJdbc updatedTicket) {
         Optional<TicketJdbc> ticketToUpdate = ticketJdbcRepository.findById(id);
@@ -169,21 +172,10 @@ public class TicketController {
             ticket.setEmail(updatedTicket.getEmail());
 
             ticketJdbcRepository.save(ticket);
+            System.out.println("Ticket with id " + id + " updated :)");
             return ResponseEntity.ok().build(); // 200 OK
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @Test
-    public void testSaveTicketJdbc() {
-        TicketJdbc ticket = new TicketJdbc();
-        ticket.setFilm("The Godfather");
-        ticket.setAmount(2);
-        ticket.setFirstname("Knut");
-        ticket.setLastname("Knuttsen");
-        ticket.setTel("12345678");
-        ticket.setEmail("john.c.breckinridge@altostrat.com");
-        ticketJdbcRepository.saveTicket(ticket);
     }
 }

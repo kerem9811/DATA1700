@@ -69,7 +69,8 @@ $('document').ready(async () => {
     // Send updated data to backend (PUT request)
     async function updateTicketBackend(ticket) {
         await $.ajax({
-            url: `/tickets/${ticket.id}`,
+            // url: `/tickets/${ticket.id}`,
+            url: `/ticketsJdbc/${ticket.id}`,
             type: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(ticket)
@@ -78,6 +79,12 @@ $('document').ready(async () => {
 
     // Delete all tickets, then refresh table
     $('#slettaltback').on('click', async function () {
+        await clearTicketsBackend();
+        await getSortedBackend();
+        $('#img').css('background-image', 'url("../img/movieroll.webp")');
+    });
+    // Does the same as delete tickets, "simulates" buying ;)
+    $('#buytickets').on('click', async function () {
         await clearTicketsBackend();
         await getSortedBackend();
         $('#img').css('background-image', 'url("../img/movieroll.webp")');
@@ -118,10 +125,9 @@ $('document').ready(async () => {
 
     // Get the tickets sorted from backend and put into table
     async function getSortedBackend() {
-        await $.getJSON("/tickets/allSorted", function (tickets) {
-        // await $.getJSON("/tickets/allSortedJdbc", function (tickets) {
-                console.log('Backend tickets received:', tickets);
-
+        // await $.getJSON("/tickets/allSorted", function (tickets) {
+        await $.getJSON("/tickets/allSortedJdbc", async function (tickets) {
+                // Create table
                 const $table = $('<table>').addClass('tftable');
                 const $headerRow = $('<tr>');
 
@@ -154,7 +160,8 @@ $('document').ready(async () => {
 
                     // Add the click handler directly to the button, using its ID
                     deleteButton.click(async function () {
-                        await deleteTicketById(ticket.id); // Pass the ticket ID
+                        // await deleteTicketById(ticket.id); // Pass the ticket ID
+                        await deleteJdbcTicketById(ticket.id); // Pass the ticket ID
                         await getSortedBackend();  // Refresh the table
                     });
                     // Add the click handler for editing
@@ -163,7 +170,6 @@ $('document').ready(async () => {
                         await editTicket(ticket.id);
                         $('#edit-film').val(ticket.filmid);
                     });
-                    // await getSortedBackend();
 
                     // Add the button in its own cell
                     $row.append($('<td>').append(deleteButton));
@@ -171,8 +177,17 @@ $('document').ready(async () => {
                     $table.append($row);
                 }
 
-                // Append the contents of table variable to the table in html.
-                $('#listeback').html($table);
+                // If the json object is empty, ie. no tickets returned, then dont show shopping cart.
+                if (tickets.length !== 0) {
+                    console.log('Backend tickets received:', tickets);
+                    $("#handlekurv").show();
+                    // Append the contents of table variable to the table in html.
+                    $('#listeback').html($table);
+                } else {
+                    $("#handlekurv").hide();
+                    await clearTableBackend();
+                    $('#listeback').html("");
+                }
             }
         ).fail(function () {
             console.error("Failed to fetch ticket data.");
@@ -189,7 +204,8 @@ $('document').ready(async () => {
     async function clearTicketsBackend() {
         try {
             await $.ajax({
-                url: "/tickets/clearback",
+                // url: "/tickets/clearback",
+                url: "/tickets/clearbackJdbc",
                 type: "DELETE",
                 success: function (data, textStatus, jqXHR) {
                     if (jqXHR.status === 204) {
@@ -234,6 +250,24 @@ $('document').ready(async () => {
         try {
             await $.ajax({
                 url: "/tickets/deleteTicketById",
+                // url: "/tickets/deleteTicketByIdJdbc",
+                type: 'DELETE',
+                data: {id: id}
+            });
+            console.log("Ticket with ID " + id + " deleted successfully!");
+            $("#updateTicketDiv").hide();
+        } catch (error) {
+            console.error("Error deleting ticket with ID " + id + ": ", error);
+            alert("Error deleting ticket, please try again.");
+        }
+    }
+
+    // delete single jdbc ticket function
+    async function deleteJdbcTicketById(id) {
+        try {
+            await $.ajax({
+                // url: "/tickets/deleteTicketById",
+                url: "/tickets/deleteTicketByIdJdbc",
                 type: 'DELETE',
                 data: {id: id}
             });
@@ -248,7 +282,8 @@ $('document').ready(async () => {
     // Function to edit ticket
     async function editTicket(id) {
         try {
-            let ticket = await $.getJSON(`/tickets/${id}`);
+            // let ticket = await $.getJSON(`/tickets/${id}`);
+            let ticket = await $.getJSON(`/ticketsJdbc/${id}`);
 
             // Populate form fields:
             $('#edit-id').val(ticket.id);
@@ -270,10 +305,11 @@ $('document').ready(async () => {
     }
 
     // If user selects in dropdown, background image changes
-    $('#film').on('change', function() {
+    $('#film').on('change', function () {
         const selectedFilm = $(this).val();
         updateBackgroundImage(selectedFilm);
     });
+
     // The function to change background image.
     function updateBackgroundImage(filmName) {
         if (filmImages[filmName]) {
@@ -287,7 +323,6 @@ $('document').ready(async () => {
             console.warn("No image found for film:", filmName);
         }
     }
-
 
 // The dropdown is populated as the website loads
     try {

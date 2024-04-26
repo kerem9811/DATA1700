@@ -17,6 +17,8 @@ import lombok.Setter;
 public class TicketJdbc {
     private Long id;
 
+    private Integer filmid;
+
     @Setter
     @NotBlank
     private String film;
