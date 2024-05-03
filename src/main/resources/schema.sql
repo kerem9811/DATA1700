@@ -23,6 +23,13 @@ CREATE TABLE if not exists ticketsjdbc
     email     VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE if not exists users
+(
+    id      IDENTITY NOT NULL PRIMARY KEY,
+    username varchar(50)      NOT NULL,
+    password varchar(50)      NOT NULL
+);
+
 drop table if exists films;
 CREATE TABLE if not exists films
 (
